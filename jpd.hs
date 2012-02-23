@@ -6,24 +6,23 @@ module Main (
 import Data.List
 import Control.Monad.State
 
-data Html = Html {zhs :: [String], zid2 :: String}
+data Html = Html {ztags :: [String], junk :: String}
 
 xhtml :: String -> State Html ()
-xhtml s = state (\hd -> ( (), hd{zhs=("<" ++ s ++ ">"):(zhs hd)}  ))
+xhtml s = state (\hd -> ( (), hd{ztags=("<" ++ s ++ ">"):(ztags hd)}  ))
 
 q :: String -> State Html ()
-q s = state (\hd -> ((),hd {zhs=s:(zhs hd)}))
+q s = state (\hd -> ((),hd {ztags=s:(ztags hd)}))
 
 x ! y = x >>= (\s-> atfunc y)
 
 atfunc :: String -> State Html ()
 atfunc s = state ( \hd ->
-    let hs = zhs hd
+    let hs = ztags hd
 	hs' = ((init $ head hs) ++ " " ++ s ++ ">") : hs
-	hd' = hd{zhs=hs'}
+	hd' = hd{ztags=hs'}
     in ((), hd')
   )
-
 
 at1 n = "pos_x=\"" ++ (show n) ++ "\""
 at2 n = "pos_y=\"" ++ (show n) ++ "\""
@@ -37,7 +36,8 @@ _p = xhtml "/p"
 h1 = xhtml "h1"
 _h1 = xhtml "/h1"
 
-html00 title =
+html0 :: String -> Html -- KEEP for accurate error messages if Html changed
+html0 title =
      Html [
      "</head>"
      ,"<title>" ++ title ++ "</title>"
@@ -49,8 +49,8 @@ html00 title =
 
 render :: State Html () -> String -> String
 render (hf) title = s where
-    Html hs' id2 = execState hf (html00 title)
-    hs = reverse $  "</html>" : hs'
+    hd = execState hf (html0 title)
+    hs = reverse $  "</html>" : (ztags hd)
     s = foldr f "" hs
     f xx a = xx ++ ('\n':a)
 
@@ -64,11 +64,11 @@ myhtml = do
 myhtml_sub = do
     p ! at1 3 ! at2 5
     q "this is paragraph 1."
-    h1
     do
+      h1
       q "q data"
       q "q data"
-    _h1
+      _h1
     q "this is paragraph 1a"
     _p
     p
