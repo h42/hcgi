@@ -17,8 +17,13 @@ q s = state (\hd -> ((),hd {zhs=s:(zhs hd)}))
 x ! y = x >>= (\s-> atfunc y)
 
 atfunc :: String -> State Html ()
-atfunc s = state (\hd -> ((),
-     hd{zhs=( (init $ head (zhs hd)) ++ " " ++ s ++ ">"):(zhs hd)} ))
+atfunc s = state ( \hd ->
+    let hs = zhs hd
+	hs' = ((init $ head hs) ++ " " ++ s ++ ">") : hs
+	hd' = hd{zhs=hs'}
+    in ((), hd')
+  )
+
 
 at1 n = "pos_x=\"" ++ (show n) ++ "\""
 at2 n = "pos_y=\"" ++ (show n) ++ "\""
