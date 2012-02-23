@@ -1,6 +1,14 @@
 HSFLAGS = -O -fwarn-name-shadowing -static #-dynamic
 PROGS=jpd
+OBJS=Xhtml.o
+
 all:$(PROGS)
+
+jpd:jpd.hs Xhtml.o
+
+#ghc $(HSFLAGS) --make -o jpd jpd.hs $(OBJS)
+
+Xhtml.o:Xhtml.hs
 
 % : %.hs
 	ghc $(HSFLAGS) --make -o $@ $<
