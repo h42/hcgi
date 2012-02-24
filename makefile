@@ -9,6 +9,7 @@ jpd:jpd.hs Xhtml.o
 #ghc $(HSFLAGS) --make -o jpd jpd.hs $(OBJS)
 
 Xhtml.o:Xhtml.hs
+	ghc $(HSFLAGS) -c Xhtml.hs -o Xhtml.o
 
 % : %.hs
 	ghc $(HSFLAGS) --make -o $@ $<

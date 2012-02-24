@@ -2,14 +2,22 @@ module Xhtml (
     Html (..)
     ,cgiPage
     ,(!)
-    ,body,_body
-    ,at1, at2
+    ,(>>>)
+
+    ,body,body'
+    ,br'
+    ,div,div'
+    ,h1,h1'
+    ,html,html'
+    ,p,p'
     ,q
-    ,p,_p
-    ,h1,_h1
-    ,html,_html
+
+    -- ATTRIBUTES
+    ,hclass
+    ,id
 ) where
 
+import Prelude hiding (head,id,div)
 import Data.List
 import Control.Monad.State
 
@@ -22,26 +30,38 @@ q :: String -> State Html ()
 q s = state (\hd -> ((),hd {ztags=s:(ztags hd)}))
 
 x ! y = x >>= (\s-> atfunc y)
+x >>> y = x >>= (\s->y)
 
 atfunc :: String -> State Html ()
 atfunc s = state ( \hd ->
     let hs = ztags hd
-	hs' = ((init $ head hs) ++ " " ++ s ++ ">") : hs
+	hs' = ((init $ head hs) ++ " " ++ s ++ ">") : tail hs
 	hd' = hd{ztags=hs'}
     in ((), hd')
   )
 
-at1 n = "pos_x=\"" ++ (show n) ++ "\""
-at2 n = "pos_y=\"" ++ (show n) ++ "\""
+atfunc2 :: String -> String -> String
+atfunc2 attr val = attr ++ ("=\"" ++ val ++  "\"")
 
-html = xhtml "html"
-_html = xhtml "/html"
 body = xhtml "body"
-_body = xhtml "/body"
-p = xhtml "p"
-_p = xhtml "/p"
+body' = xhtml "/body"
+br' = xhtml "br /"
+div = xhtml "div"
+div' = xhtml "/div"
+html = xhtml "html"
+html' = xhtml "/html"
 h1 = xhtml "h1"
-_h1 = xhtml "/h1"
+h1' = xhtml "/h1"
+h2 = xhtml "h1"
+h2' = xhtml "/h1"
+h3 = xhtml "h1"
+h3' = xhtml "/h1"
+p = xhtml "p"
+p' = xhtml "/p"
+
+id val = atfunc2 "id" val
+hclass val = atfunc2 "class" val
+
 
 html0 :: String -> Html -- KEEP for accurate error messages if Html changed
 html0 title =
@@ -71,7 +91,7 @@ cgiPage mytype cookie myhtml title = hs where
 myhtml = do
     body
     myhtml_sub
-    _body
+    body'
 
 myhtml_sub = do
     p ! at1 3 ! at2 5
@@ -80,11 +100,11 @@ myhtml_sub = do
       h1
       q "q data"
       q "q data"
-      _h1
+      h1'
     q "this is paragraph 1a"
-    _p
+    p'
     p
     q "this is paragraph 2"
-    _p
+    p'
 -}
 
