@@ -4,9 +4,18 @@ import Xhtml
 
 myhtml :: State Html ()
 myhtml = do
+    defDoctype
+    html ! xmlns defDns
+
+    h_head
+    meta ! attr "http-equiv" "Content-Type"  ! attr "content" "text/html;charset=utf-8"  !  "/"
+    title >>> q "Test Page" >>> title'
+    h_head'
+
     body
     myhtml_sub
     body'
+    html'
 
 myhtml_sub = do
     h1
@@ -24,5 +33,5 @@ myhtml_sub = do
     div'
 
 main = do
-    putStr $ cgiPage "text/html" "" myhtml "Test Page"
+    putStr $ cgiPage "text/html" "" myhtml
 
