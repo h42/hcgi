@@ -1,6 +1,6 @@
 module Xhtml (
     Html (..)
-    ,cgiPage
+    ,render
     ,attr
     ,(!)
     ,(>>>)
@@ -105,8 +105,8 @@ render (hf) = s where
 cgiContent sx = "Content-type: " ++ sx ++ "; charset=utf-8\n\n"
 cgiCookie sx = sx
 
-cgiPage mytype cookie myhtml = hs where
-    hs = cgiContent mytype ++ cgiCookie cookie ++ render myhtml
+--cgiPage cookie myhtml = hs where
+--    hs = cgiContent mytype ++ cgiCookie cookie ++ render myhtml
 
 {-myhtml :: State Html ()
 myhtml = do

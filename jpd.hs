@@ -1,15 +1,17 @@
-import Prelude hiding (head,id,div)
+import Prelude hiding (id,div)
 import Control.Monad.State
 import Xhtml
 
-myhtml :: State Html ()
-myhtml = do
+http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
+
+myhtml :: String -> State Html ()
+myhtml mytitle = do
     defDoctype
     html ! xmlns defDns
 
     h_head
     meta ! attr "http-equiv" "Content-Type"  ! attr "content" "text/html;charset=utf-8"  !  "/"
-    title >>> q "Test Page" >>> title'
+    title >>> q mytitle >>> title'
     h_head'
 
     body
@@ -33,5 +35,5 @@ myhtml_sub = do
     div'
 
 main = do
-    putStr $ cgiPage "text/html" "" myhtml
+    putStr $ http_hdr ++ render (myhtml "Test Page")
 
