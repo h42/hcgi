@@ -1,15 +1,15 @@
-import Prelude hiding (id,div)
+import Prelude hiding (id,div,span)
 import Control.Monad.State
 import Xhtml
 
-myhtml_sub = do
+myhtml = do
     h1
     q "Header 1"
     h1'
 
     div ! hclass "d1" ! id "id11" >>> do
 	p ! hclass "c1" ! id "id12"
-	q "this is paragraph 1."
+	span!hclass "span 1" >>> q "this is paragraph 1." >>> span'
 	br'
 	q "this is paragraph 1a"
 	p'
@@ -17,7 +17,7 @@ myhtml_sub = do
     div'
 
     div ! hclass "d2" ! id "id21" >>> do
-	p ! hclass "c1" ! id "id22"
+	p ! hclass "c1" ! id "id22" ! title "This is div 2 par 1"
 	q "this is paragraph 1."
 	br'
 	q "this is paragraph 1a"
@@ -26,5 +26,5 @@ myhtml_sub = do
     div'
 
 main = do
-    putStr $ def_http_hdr ++ render (def_html "Test Page" myhtml_sub)
+    putStr $ def_http_hdr ++ render (def_html "Test Page" myhtml )
 

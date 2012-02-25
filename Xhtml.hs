@@ -14,11 +14,13 @@ module Xhtml (
     ,meta
     ,p,p'
     ,q
-    ,title,title'
+    ,span,span'
+    ,h_title,h_title'
 
     -- ATTRIBUTES
     ,hclass
     ,id
+    ,title
     ,xmlns
 
     -- Constants
@@ -28,8 +30,8 @@ module Xhtml (
     ,def_html
 ) where
 
-import Prelude hiding (id,div)
-import Data.List
+import Prelude hiding (div,id,span)
+import Data.List hiding (span)
 import Control.Monad.State
 
 data Html = Html {ztags :: [String], junk :: String}
@@ -72,11 +74,14 @@ h3' = xhtml "/h1"
 meta = xhtml "meta"
 p = xhtml "p"
 p' = xhtml "/p"
-title = xhtml "title"
-title' = xhtml "/title"
+span = xhtml "span"
+span' = xhtml "/span"
+h_title = xhtml "title"
+h_title' = xhtml "/title"
 
-id val = attr "id" val
 hclass val = attr "class" val
+id val = attr "id" val
+title val = attr "title" val
 xmlns val = attr "xmlns" val
 
 
@@ -91,10 +96,11 @@ render (hf) = s where
     f xx a = xx ++ ('\n':a)
 
 -- DEFAULTS
+def_http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
+
 def_xmlns = "http://www.w3.org/1999/xhtml"
 def_doctype = xhtml
      "!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\""
-def_http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
 
 def_html :: String -> State Html () -> State Html ()
 def_html mytitle mysub = do
@@ -103,7 +109,7 @@ def_html mytitle mysub = do
 
     h_head
     meta ! attr "http-equiv" "Content-Type"  ! attr "content" "text/html;charset=utf-8"  !  "/"
-    title >>> q mytitle >>> title'
+    h_title >>> q mytitle >>> h_title'
     h_head'
 
     body
