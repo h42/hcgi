@@ -5,17 +5,17 @@ module Xhtml (
     ,(!)
     ,(>>>)
 
-    ,body,body'
-    ,br'
-    ,div,div'
-    ,h1,h1'
-    ,h_head,h_head'
-    ,html,html'
+    ,body,body_
+    ,br,br_
+    ,div,div_
+    ,h1,h1_
+    ,h_head,h_head_
+    ,html,html_
     ,meta
-    ,p,p'
+    ,p,p_
     ,q
-    ,span,span'
-    ,h_title,h_title'
+    ,span,span_
+    ,h_title,h_title_
 
     -- ATTRIBUTES
     ,hclass
@@ -34,10 +34,13 @@ import Prelude hiding (div,id,span)
 import Data.List hiding (span)
 import Control.Monad.State
 
-data Html = Html {ztags :: [String], junk :: String}
+data Html = Html {ztags :: [String], etags :: [String]}
 
 xhtml :: String -> State Html ()
-xhtml s = state (\hd -> ( (), hd{ztags=("<" ++ s ++ ">"):(ztags hd)}  ))
+xhtml s = state (\hd -> ( (),
+    let etags' = ("</" ++ s ++ ">") : etags hd
+	ztags' = ("<" ++ s ++ ">") : ztags hd
+    in hd{ztags=ztags', etags=etags'}  ))
 
 q :: String -> State Html ()
 q s = state (\hd -> ((),hd {ztags=s:(ztags hd)}))
@@ -57,27 +60,28 @@ attr :: String -> String -> String
 attr var val = var ++ ("=\"" ++ val ++  "\"")
 
 body = xhtml "body"
-body' = xhtml "/body"
-br' = xhtml "br /"
+body_ = xhtml "/body"
+br  = br_
+br_ = xhtml "br /"
 div = xhtml "div"
-div' = xhtml "/div"
+div_ = xhtml "/div"
 h_head = xhtml "head"
-h_head' = xhtml "/head"
+h_head_ = xhtml "/head"
 html = xhtml "html"
-html' = xhtml "/html"
+html_ = xhtml "/html"
 h1 = xhtml "h1"
-h1' = xhtml "/h1"
+h1_ = xhtml "/h1"
 h2 = xhtml "h1"
-h2' = xhtml "/h1"
+h2_ = xhtml "/h1"
 h3 = xhtml "h1"
-h3' = xhtml "/h1"
+h3_ = xhtml "/h1"
 meta = xhtml "meta"
 p = xhtml "p"
-p' = xhtml "/p"
+p_ = xhtml "/p"
 span = xhtml "span"
-span' = xhtml "/span"
+span_ = xhtml "/span"
 h_title = xhtml "title"
-h_title' = xhtml "/title"
+h_title_ = xhtml "/title"
 
 hclass val = attr "class" val
 id val = attr "id" val
@@ -86,7 +90,7 @@ xmlns val = attr "xmlns" val
 
 
 html0 :: Html -- KEEP for accurate error messages if Html changed
-html0 = Html [] ""
+html0 = Html [] []
 
 render :: State Html () -> String
 render (hf) = s where
@@ -96,6 +100,7 @@ render (hf) = s where
     f xx a = xx ++ ('\n':a)
 
 -- DEFAULTS
+def_http_hdr :: String
 def_http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
 
 def_xmlns = "http://www.w3.org/1999/xhtml"
@@ -109,11 +114,11 @@ def_html mytitle mysub = do
 
     h_head
     meta ! attr "http-equiv" "Content-Type"  ! attr "content" "text/html;charset=utf-8"  !  "/"
-    h_title >>> q mytitle >>> h_title'
-    h_head'
+    h_title >>> q mytitle >>> h_title_
+    h_head_
 
     body
     mysub
-    body'
-    html'
+    body_
+    html_
 
