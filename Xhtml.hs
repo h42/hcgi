@@ -22,8 +22,10 @@ module Xhtml (
     ,xmlns
 
     -- Constants
-    ,defDns
-    ,defDoctype
+    ,def_xmlns
+    ,def_doctype
+    ,def_http_hdr
+    ,def_html
 ) where
 
 import Prelude hiding (id,div)
@@ -81,20 +83,6 @@ xmlns val = attr "xmlns" val
 html0 :: Html -- KEEP for accurate error messages if Html changed
 html0 = Html [] ""
 
-html00 =
-     Html [
-     "</head>"
-     ,"<title>" ++ "title" ++ "</title>"
-     ,"<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />"
-     ,"<head>"
-     ,"<html xmlns=\"http://www.w3.org/1999/xhtml\">"
-     ,"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-    ] ""
-
-defDns = "http://www.w3.org/1999/xhtml"
-defDoctype = xhtml
-     "!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\""
-
 render :: State Html () -> String
 render (hf) = s where
     hd = execState hf (html0)
@@ -102,30 +90,24 @@ render (hf) = s where
     s = foldr f "" hs
     f xx a = xx ++ ('\n':a)
 
-cgiContent sx = "Content-type: " ++ sx ++ "; charset=utf-8\n\n"
-cgiCookie sx = sx
+-- DEFAULTS
+def_xmlns = "http://www.w3.org/1999/xhtml"
+def_doctype = xhtml
+     "!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\""
+def_http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
 
---cgiPage cookie myhtml = hs where
---    hs = cgiContent mytype ++ cgiCookie cookie ++ render myhtml
+def_html :: String -> State Html () -> State Html ()
+def_html mytitle mysub = do
+    def_doctype
+    html ! xmlns def_xmlns
 
-{-myhtml :: State Html ()
-myhtml = do
+    h_head
+    meta ! attr "http-equiv" "Content-Type"  ! attr "content" "text/html;charset=utf-8"  !  "/"
+    title >>> q mytitle >>> title'
+    h_head'
+
     body
-    myhtml_sub
+    mysub
     body'
-
-myhtml_sub = do
-    p ! at1 3 ! at2 5
-    q "this is paragraph 1."
-    do
-      h1
-      q "q data"
-      q "q data"
-      h1'
-    q "this is paragraph 1a"
-    p'
-    p
-    q "this is paragraph 2"
-    p'
--}
+    html'
 
