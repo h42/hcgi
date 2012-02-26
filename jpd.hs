@@ -12,7 +12,6 @@ myhtml = do
 	span ! hclass "span 1"  >>> q "this is paragraph 1."  >>> span_
 	br
 	q"this is paragraph 1a"
-	p_
 	p >>> q"this is paragraph 2" >>> p_
     div_
 
@@ -21,7 +20,6 @@ myhtml = do
 	q"this is paragraph 1."
 	br
 	q"this is paragraph 1a"
-	p_
 	p >>> q "this is paragraph 2" >>> p_
     div_
 
