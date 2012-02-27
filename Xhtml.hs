@@ -5,15 +5,24 @@ module Xhtml (
     ,(!)
     ,(>>>)
 
+    ,b,b_
+    ,big,big_
     ,body,body_
     ,br
     ,div,div_
     ,h1,h1_
+    ,h2,h2_
+    ,h3,h3_
+    ,h4,h4_
+    ,h5,h5_
     ,h_head,h_head_
     ,html,html_
+    ,i,i_
     ,meta
     ,p,p_
+    ,pre,pre_
     ,q
+    ,small,small_
     ,span,span_
     ,h_title,h_title_
 
@@ -92,6 +101,10 @@ atfunc0 s = state ( \hd ->
 attr :: String -> String -> String
 attr var val = var ++ ("=\"" ++ val ++  "\"")
 
+b = xhtml "b"
+b_ = close "b"
+big = xhtml "big"
+big_ = close "big"
 body = xhtml "body"
 body_ = close "body"
 br = xhtml "br /"
@@ -103,15 +116,23 @@ html = xhtml "html"
 html_ = close "html"
 h1 = xhtml "h1"
 h1_ = close "h1"
-h2 = xhtml "h1"
-h2_ = close "h1"
-h3 = xhtml "h1"
-h3_ = close "h1"
+h2 = xhtml "h2"
+h2_ = close "h2"
+h3 = xhtml "h3"
+h3_ = close "h3"
+h4 = xhtml "h4"
+h4_ = close "h4"
+h5 = xhtml "h5"
+h5_ = close "h5"
+i = xhtml "i"
+i_ = close "i"
 meta = xhtml "meta"
---p = xhtml "p"
---p_ = close "p"
 p = p_open
 p_ = p_close
+pre = xhtml "pre"
+pre_ = close "pre"
+small = xhtml "small"
+small_ = close "small"
 span = xhtml "span"
 span_ = close "span"
 h_title = xhtml "title"

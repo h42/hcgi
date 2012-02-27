@@ -11,7 +11,7 @@ myhtml = do
 	p ! hclass "c1" ! id "id12"
 	span ! hclass "span 1"  >>> q "this is paragraph 1."  >>> span_
 	br
-	q"this is paragraph 1a"
+	b >>> q"this is paragraph 1a" >>> b_
 	p >>> q"this is paragraph 2" >>> p_
     div_
 
@@ -20,8 +20,32 @@ myhtml = do
 	q"this is paragraph 1."
 	br
 	q"this is paragraph 1a"
-	p >>> q "this is paragraph 2" >>> p_
+	p >>> i >>> q "this is paragraph 2" >>> i_ >>> p_
     div_
+
+    big_small
+    mycode
+
+big_small = do
+    h3 >>> q "xxx header" >>> h3_
+    p ! hclass "c1"
+    small >>> q"this is small line 1." >>> small_
+    br >>> q"Normal line 1"
+    br >>> q"Normal line 2"
+    br >>> q"Normal line 3"
+    let s = "this is big line 1"
+    br >>> big >>> q s >>> big_
+    p_
+
+mycode = do
+    h2 >>> q"Code example" >>> h2_
+    p >>> pre
+    q    "close2 :: String -> [String] -> [String] -> ([String],[String])"
+    q    "close2 s tags []  = (tags,[])"
+    q    "close2 s (e:es) tags"
+    q    "    | s == e    = ((etagit s):tags,es)"
+    q    "    | otherwise = close2 s es (etagit s:tags)"
+    pre_ >>> p_
 
 main = do
     putStr $ def_http_hdr ++ render (def_html "Test Page" myhtml )
