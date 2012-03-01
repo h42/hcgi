@@ -6,7 +6,7 @@ module Html_def (
 ) where
 
 import Html_base
-import Xhtml4
+import Html
 
 -- DEFAULTS
 def_http_hdr :: String

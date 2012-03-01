@@ -1,7 +1,7 @@
+import Html
 import Html_def
-import Xhtml4
-import Prelude hiding (id,div,span)
 import Html_base
+import Prelude hiding (id,div,span)
 
 myhtml= do
     h1

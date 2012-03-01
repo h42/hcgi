@@ -32,7 +32,7 @@ exports = [
  ]
 
 gen_mod =
-    "module Xhtml4 (\n"
+    "module Html (\n"
     ++  "    " ++ drop 5 (concatMap (\t-> "    ," ++ t ++  ',':t ++ "_\n") tags)
     ++  "\n"
     ++  (concatMap (\t-> "    ," ++ t ++ "\n") etags)
