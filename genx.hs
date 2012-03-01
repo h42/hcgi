@@ -24,20 +24,32 @@ etags = [
 
 attrs = [
     "hclass","id","title","xmlns"
+    ,"http_equiv"
+    ,"content"
  ]
 
 exports = [
-    "def_html"
-    ,"def_http_hdr"
+     "q"
+    ,"(!)"
+    ,"(>>>)"
+    ,"btag"
+    ,"State"
+    ,"Html"
+    ,"render"
  ]
 
 gen_mod =
-    "module Html (\n"
+    "--\n"
+    ++ "-- PROGRAM IS GENERATED - DO NOT ALTER BY HAND\n"
+    ++ "--\n\n"
+    ++ "module Html (\n"
     ++  "    " ++ drop 5 (concatMap (\t-> "    ," ++ t ++  ',':t ++ "_\n") tags)
     ++  "\n"
     ++  (concatMap (\t-> "    ," ++ t ++ "\n") etags)
     ++  "\n"
     ++  (concatMap (\t-> "    ," ++ t ++ "\n") attrs)
+    ++  "\n"
+    ++  (concatMap (\t-> "    ," ++ t ++ "\n") exports)
     ++  ") where\n"
 
 gen_funcs =
@@ -47,9 +59,9 @@ gen_funcs =
     ++ concatMap estr etags
     ++ "\n"
     ++  concatMap astr attrs
-  where fstr f = f ++ "  = xhtml " ++ show f ++ "\n"
-	      ++ f ++ "_ = close " ++ show f ++ "\n"
-	estr f = f  ++  " = xhtml \""  ++  f  ++  "/\"\n"
+  where fstr f = f ++ "  = btag " ++ show f ++ "\n"
+	      ++ f ++ "_ = etag " ++ show f ++ "\n"
+        estr f = f  ++  " = btag \""  ++  f  ++  "/\"\n"
 	astr f = f ++ " val = attr " ++ show f ++ " val\n"
 
 gen_imports =

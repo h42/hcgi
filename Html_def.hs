@@ -5,7 +5,7 @@ module Html_def (
     ,def_html
 ) where
 
-import Html_base
+--import Html_base
 import Html
 
 -- DEFAULTS
@@ -13,7 +13,7 @@ def_http_hdr :: String
 def_http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
 
 def_xmlns = "http://www.w3.org/1999/xhtml"
-def_doctype = xhtml
+def_doctype = btag
      "!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\""
 
 def_html :: String -> State Html () -> State Html ()
@@ -22,7 +22,7 @@ def_html mytitle mysub = do
     html ! xmlns def_xmlns
 
     h_head
-    meta ! attr "http-equiv" "Content-Type"  ! attr "content" "text/html;charset=utf-8"  !  "/"
+    meta ! http_equiv "Content-Type"  ! content "text/html;charset=utf-8"  !  "/"
     h_title >>> q mytitle >>> h_title_
     h_head_
 

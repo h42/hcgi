@@ -1,6 +1,5 @@
 import Html
 import Html_def
-import Html_base
 import Prelude hiding (id,div,span)
 
 myhtml= do
@@ -49,6 +48,6 @@ mycode = do
     pre_ >>> p_
 
 main = do
-    s <- readFile "jpd.hs"
-    putStr $ def_http_hdr ++ render (def_html "Test Page" (myhtml) )
+    --s <- readFile "jpd.hs"
+    putStr $ def_http_hdr ++ render (def_html "Test Page" myhtml )
 
