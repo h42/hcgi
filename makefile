@@ -1,15 +1,26 @@
 HSFLAGS = -O -fwarn-name-shadowing -static #-dynamic
-PROGS=jpd
-OBJS=Xhtml.o
+OBJS=Html_base.o Html.o Html_def.o
+PROGS=genx jpd
 
-all:$(PROGS)
 
-jpd:jpd.hs Xhtml.o
+jpd:jpd.hs $(OBJS)
+	ghc $(HSFLAGS) --make -o jpd jpd.hs
 
-#ghc $(HSFLAGS) --make -o jpd jpd.hs $(OBJS)
 
-Xhtml.o:Xhtml.hs
-	ghc $(HSFLAGS) -c Xhtml.hs -o Xhtml.o
+Html_base.o:Html_base.hs
+	ghc $(HSFLAGS)  -c Html_base.hs  -o Html_base.o
+
+Html_def.o:Html_def.hs Html_base.o Html.o
+	ghc $(HSFLAGS)  -c Html_def.hs  -o Html_def.o
+
+genx:genx.hs
+	ghc $(HSFLAGS) --make -o genx genx.hs
+
+Html.o:Html.hs
+	ghc $(HSFLAGS) -c Html.hs -o Html.o
+
+Html.hs:genx
+	genx > Html.hs
 
 % : %.hs
 	ghc $(HSFLAGS) --make -o $@ $<
@@ -19,4 +30,4 @@ install:
 	ls -l /var/www/cgi-bin
 
 clean:
-	-rm *.hi *.o $(PROGS)
+	-rm -v *.hi *.o $(PROGS) Html.hs

@@ -1,10 +1,11 @@
+import Html_def
+import Xhtml4
 import Prelude hiding (id,div,span)
-import Control.Monad.State
-import Xhtml
+import Html_base
 
-myhtml = do
+myhtml= do
     h1
-    q"Header 1"
+    q "Header 1"
     h1_
 
     div ! hclass "d1" ! id "id11" >>> do
@@ -34,7 +35,7 @@ big_small = do
     br >>> q"Normal line 2"
     br >>> q"Normal line 3"
     let s = "this is big line 1"
-    br >>> big >>> q s >>> big_
+    br >>> big >>> q "This is the problem" >>>  big_
     p_
 
 mycode = do
@@ -48,5 +49,6 @@ mycode = do
     pre_ >>> p_
 
 main = do
-    putStr $ def_http_hdr ++ render (def_html "Test Page" myhtml )
+    s <- readFile "jpd.hs"
+    putStr $ def_http_hdr ++ render (def_html "Test Page" (myhtml) )
 
