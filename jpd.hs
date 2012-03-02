@@ -4,47 +4,52 @@ import Prelude hiding (id,div,span)
 
 myhtml= do
     h1
-    q "Header 1"
+    s "Header 1"
     h1_
 
-    div ! hclass "d1" ! id "id11" >>> do
-	p ! hclass "c1" ! id "id12"
-	span ! hclass "span 1"  >>> q "this is paragraph 1."  >>> span_
+    div ! h_class "d1" ! id "id11" >>> do
+	blockquote
+	p ! h_class "c1" ! id "id12"
+	span ! h_class "span 1"  >>> s "this is paragraph 1."  >>> span_
 	br
-	b >>> q"this is paragraph 1a" >>> b_
-	p >>> q"this is paragraph 2" >>> p_
+	img ! src "http://localhost/plumber.jpg" ! alt "plumber.jpg"
+	    ! width "200" ! height  "240" ! "/"
+	br
+	b >>> s"this is paragraph 1a" >>> b_
+	p >>> s"this is paragraph 2" >>> p_
+	blockquote_
     div_
 
-    div ! hclass "d2" ! id "id21" >>> do
-	p ! hclass "c1" ! id "id22" ! title "This is div 2 par 1"
-	q"this is paragraph 1."
+    div ! h_class "d2" ! id "id21" >>> do
+	p ! h_class "c1" ! id "id22" ! title "This is div 2 par 1"
+	s"this is paragraph 1."
 	br
-	q"this is paragraph 1a"
-	p >>> i >>> q "this is paragraph 2" >>> i_ >>> p_
+	s"this is paragraph 1a"
+	p >>> i >>> s"this is paragraph 2" >>> i_ >>> p_
     div_
 
     big_small
     mycode
 
 big_small = do
-    h3 >>> q "xxx header" >>> h3_
-    p ! hclass "c1"
-    small >>> q"this is small line 1." >>> small_
-    br >>> q"Normal line 1"
-    br >>> q"Normal line 2"
-    br >>> q"Normal line 3"
-    let s = "this is big line 1"
-    br >>> big >>> q "This is the problem" >>>  big_
+    h3 >>> s"xxx header" >>> h3_
+    p ! h_class "c1"
+    small >>> s"this is small line 1." >>> small_
+    br >>> s"Normal line 1"
+    br >>> s"Normal line 2"
+    br >>> s"Normal line 3"
+    let sval = "this is big line 1"
+    br >>> big >>> s sval >>>  big_
     p_
 
 mycode = do
-    h2 >>> q"Code example" >>> h2_
+    h2 >>> s"Code example" >>> h2_
     p >>> pre
-    q    "close2 :: String -> [String] -> [String] -> ([String],[String])"
-    q    "close2 s tags []  = (tags,[])"
-    q    "close2 s (e:es) tags"
-    q    "    | s == e    = ((etagit s):tags,es)"
-    q    "    | otherwise = close2 s es (etagit s:tags)"
+    s    "close2 :: String -> [String] -> [String] -> ([String],[String])"
+    s    "close2 s tags []  = (tags,[])"
+    s    "close2 s (e:es) tags"
+    s    "    | s == e    = ((etagit s):tags,es)"
+    s    "    | otherwise = close2 s es (etagit s:tags)"
     pre_ >>> p_
 
 main = do

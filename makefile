@@ -26,7 +26,8 @@ Html.hs:genx
 	ghc $(HSFLAGS) --make -o $@ $<
 
 install:
-	install -m 755 -o apache -g apache $(PROGS) /var/www/cgi-bin
+	install -m 755 -o apache -g apache jpd  /var/www/cgi-bin
+	install -m 755 -o apache -g apache plumber.jpg  /var/www/html
 	ls -l /var/www/cgi-bin
 
 clean:

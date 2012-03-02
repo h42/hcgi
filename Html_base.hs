@@ -2,11 +2,11 @@
 module Html_base (
     State (..)
     ,Html (..)
-    ,q
+    ,s
     ,btag
     ,etag
     ,render
-    ,attr
+    ,atag
     ,(!)
     ,(>>>)
 ) where
@@ -16,23 +16,23 @@ import Data.List hiding (span)
 
 newtype State s a = State { runState :: s -> (a,s) }
 
-instance Monad (State s) where
-    return x = State $ \s -> (x,s)
-    (State h) >>= f = State $ \s -> let (a, newState) = h s
-					(State g) = f a
-				    in g newState
-execState m s = snd (runState m s)
+instance Monad (State st) where
+    return x = State $ \st -> (x,st)
+    (State h) >>= f = State $ \st -> let (a, newState) = h st
+					 (State g) = f a
+				     in g newState
+execState m st = snd (runState m st)
 
 data Html = Html {ztags :: [String], pcnt :: Int}
 
 btag :: String -> State Html ()
-btag s = State (\hd -> btag' s hd)
-btag' s hd =
-    let ztags' = ("<" ++ s ++ ">") : ztags hd
+btag t = State (\hd -> btag' t hd)
+btag' t hd =
+    let ztags' = ("<" ++ t ++ ">") : ztags hd
     in ((),hd{ztags=ztags'})
 
-q :: String -> State Html ()
-q s = State (\hd -> ((),hd {ztags=s:(ztags hd)}))
+s :: String -> State Html ()
+s x = State (\hd -> ((),hd {ztags=x:(ztags hd)}))
 
 p_open :: State Html ()
 p_open = State (\hd -> p_open' hd)
@@ -45,7 +45,7 @@ p_etag = State (\hd -> p_etag' hd)
 p_etag' hd = btag' "/p" hd{pcnt=pcnt hd-1}
 
 
-etag s = btag ('/':s)
+etag t = btag ('/':t)
 
 {-
 etag1 :: String -> State Html ()
@@ -62,37 +62,32 @@ etag2 s (e:es) tags
 -}
 
 etagit :: String -> String
-etagit s = "</" ++ s ++ ">"
-tagit :: String -> String
-tagit s = "<" ++ s ++ ">"
+etagit t = "</" ++ t ++ ">"
 
-x ! y = x >>= (\s-> atfunc0 y)
-x >>> y = x >>= (\s->y)
+tagit :: String -> String
+tagit t = "<" ++ t ++ ">"
+
+x ! y = x >>= (\st -> atfunc0 y)
+x >>> y = x >>= (\st -> y)
 
 atfunc0 :: String -> State Html ()
-atfunc0 s = State ( \hd ->
+atfunc0 st = State ( \hd ->
     let hs = ztags hd
-	hs' = ((init $ head hs) ++ " " ++ s ++ ">") : tail hs
+	hs' = ((init $ head hs) ++ " " ++ st ++ ">") : tail hs
 	hd' = hd{ztags=hs'}
     in ((), hd')
   )
 
-attr :: String -> String -> String
-attr var val = var ++ ("=\"" ++ val ++  "\"")
-
-hclass val = attr "class" val
-id val = attr "id" val
-title val = attr "title" val
-xmlns val = attr "xmlns" val
-
+atag :: String -> String -> String
+atag var val = var ++ ("=\"" ++ val ++  "\"")
 
 html0 :: Html -- KEEP for accurate error messages if Html changed
 html0 = Html [] 0
 
 render :: State Html () -> String
-render (hf) = s where
+render (hf) = str where
     hd = execState hf (html0)
     hs = reverse (ztags hd)
-    s = foldr f "" hs
+    str = foldr f "" hs
     f xx a = xx ++ ('\n':a)
 

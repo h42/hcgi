@@ -2,19 +2,29 @@ import Data.List
 import System.IO
 
 tags = [
-     "b"
+     "abbr"
+    ,"acronym"
+    ,"b"
     ,"big"
+    ,"blockquote"
     ,"body"
+    ,"center"
+    ,"del"
     ,"div"
     ,"h_head"
     ,"html"
     ,"h1","h2","h3","h4","h5","h6"
     ,"i"
+    ,"img"
+    ,"ins"
     ,"meta"
     ,"p"
     ,"pre"
+    ,"q"
     ,"small"
     ,"span"
+    ,"sub"
+    ,"super"
     ,"h_title"
  ]
 
@@ -22,14 +32,24 @@ etags = [
     "br"
  ]
 
+--
+-- Note - functions for attrs are not necessary for literals such as
+--   "/" used to close tags with attrs like <img>
+--
 attrs = [
-    "hclass","id","title","xmlns"
+    "h_class","id","title","xmlns"
     ,"http_equiv"
+
+    ,"alt"
+    ,"cite"
     ,"content"
+    ,"height"
+    ,"width"
+    ,"src"
  ]
 
 exports = [
-     "q"
+     "s"
     ,"(!)"
     ,"(>>>)"
     ,"btag"
@@ -59,10 +79,13 @@ gen_funcs =
     ++ concatMap estr etags
     ++ "\n"
     ++  concatMap astr attrs
-  where fstr f = f ++ "  = btag " ++ show f ++ "\n"
-	      ++ f ++ "_ = etag " ++ show f ++ "\n"
-        estr f = f  ++  " = btag \""  ++  f  ++  "/\"\n"
-	astr f = f ++ " val = attr " ++ show f ++ " val\n"
+  where fstr f = f ++ "  = btag " ++ (show.fix) f ++ "\n"
+	      ++ f ++ "_ = etag " ++ (show.fix) f ++ "\n"
+	estr f = f  ++  " = btag \""  ++  fix f  ++  " /\"\n"
+	astr f = f ++ " val = atag " ++ (show.fix) f ++ " val\n"
+
+	fix ('h' : '_' : xs) = xs
+	fix xs = xs
 
 gen_imports =
     "\n"

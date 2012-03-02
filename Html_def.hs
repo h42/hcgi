@@ -23,7 +23,7 @@ def_html mytitle mysub = do
 
     h_head
     meta ! http_equiv "Content-Type"  ! content "text/html;charset=utf-8"  !  "/"
-    h_title >>> q mytitle >>> h_title_
+    h_title >>> s  mytitle >>> h_title_
     h_head_
 
     body
