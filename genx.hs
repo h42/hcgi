@@ -51,7 +51,7 @@ attrs = [
 exports = [
      "s"
     ,"(!)"
-    ,"(>>>)"
+    ,"(#)"
     ,"btag"
     ,"State"
     ,"Html"
@@ -79,10 +79,10 @@ gen_funcs =
     ++ concatMap estr etags
     ++ "\n"
     ++  concatMap astr attrs
-  where fstr f = f ++ "  = btag " ++ (show.fix) f ++ "\n"
-	      ++ f ++ "_ = etag " ++ (show.fix) f ++ "\n"
+  where fstr f = f  ++  "  = btag "  ++ (show.fix) f  ++  "\n"
+	      ++ f  ++  "_ = etag "  ++ (show.fix) f  ++  "\n"
 	estr f = f  ++  " = btag \""  ++  fix f  ++  " /\"\n"
-	astr f = f ++ " val = atag " ++ (show.fix) f ++ " val\n"
+	astr f = f  ++  " val = atag "  ++  (show.fix) f  ++  " val\n"
 
 	fix ('h' : '_' : xs) = xs
 	fix xs = xs

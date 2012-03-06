@@ -4,53 +4,67 @@ import Prelude hiding (id,div,span)
 
 myhtml= do
     h1
-    s "Header 1"
+    s "HCGI Demo Program"
     h1_
 
-    div ! h_class "d1" ! id "id11" >>> do
-	blockquote
-	p ! h_class "c1" ! id "id12"
-	span ! h_class "span 1"  >>> s "this is paragraph 1."  >>> span_
+    div # do -- Simple formatting
+	h3#s"Simple Formatting" #h3_
+	p
+	s "This is the first paragraph. we can" # b # s"bold" # b_
+	s "things or" # i # s"italicize things." # i_
+	br
+	s "This sample program will eventually show a great many features"
+	s "of html"
+
+	span ! h_class "span 1"
+	br
+	s"This sentence is enclosed in a span which we can format separately"
+	span_
+
+	p_
+    div_
+
+    div # do -- Preformatted text
+	h3 # s"Preformatted Text" # h3_
+	p
+	s"This paragraph will be used to demonstrate preformatted code."
+	--br
+	s"like this code snippet"
+	pre
+	mycode
+	pre_
+	p_
+    div_
+
+    div # do -- Big / Small
+	h3 # s"Demonstrate big/small" # h3_
+	small # s"this is small line 1." # small_
+	br # s"Normal line 1"
+	br # s"Normal line 2"
+	br # s"Normal line 3"
+	let sval = "this is big line 1"
+	br # big # s sval # big_
+    div_
+
+    div # do
+	h3 # s"Demonstrate Simple Images" # h3_
+	p
+	s"This is a caption for the image."
 	br
 	img ! src "http://localhost/plumber.jpg" ! alt "plumber.jpg"
-	    ! width "200" ! height  "240" ! "/"
+	    ! width "150" ! height  "180" ! "/"
 	br
-	b >>> s"this is paragraph 1a" >>> b_
-	p >>> s"this is paragraph 2" >>> p_
-	blockquote_
+	s"This should go under the image"
+	p_
     div_
 
-    div ! h_class "d2" ! id "id21" >>> do
-	p ! h_class "c1" ! id "id22" ! title "This is div 2 par 1"
-	s"this is paragraph 1."
-	br
-	s"this is paragraph 1a"
-	p >>> i >>> s"this is paragraph 2" >>> i_ >>> p_
-    div_
-
-    big_small
-    mycode
-
-big_small = do
-    h3 >>> s"xxx header" >>> h3_
-    p ! h_class "c1"
-    small >>> s"this is small line 1." >>> small_
-    br >>> s"Normal line 1"
-    br >>> s"Normal line 2"
-    br >>> s"Normal line 3"
-    let sval = "this is big line 1"
-    br >>> big >>> s sval >>>  big_
-    p_
 
 mycode = do
-    h2 >>> s"Code example" >>> h2_
-    p >>> pre
     s    "close2 :: String -> [String] -> [String] -> ([String],[String])"
     s    "close2 s tags []  = (tags,[])"
     s    "close2 s (e:es) tags"
     s    "    | s == e    = ((etagit s):tags,es)"
     s    "    | otherwise = close2 s es (etagit s:tags)"
-    pre_ >>> p_
 
 main = do
     --s <- readFile "jpd.hs"
