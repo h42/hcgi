@@ -2,7 +2,8 @@ import Data.List
 import System.IO
 
 tags = [
-     "abbr"
+     "a"
+    ,"abbr"
     ,"acronym"
     ,"b"
     ,"big"
@@ -14,6 +15,7 @@ tags = [
     ,"h_head"
     ,"html"
     ,"h1","h2","h3","h4","h5","h6"
+    ,"hr" -- horizontal rule  --  attrs deprecated
     ,"i"
     ,"img"
     ,"ins"
@@ -40,18 +42,23 @@ attrs = [
     "h_class","id","title","xmlns"
     ,"http_equiv"
 
+    ,"accesskey"
+    ,"align"
     ,"alt"
     ,"cite"
     ,"content"
     ,"height"
+    ,"href"
+    ,"name"
     ,"width"
     ,"src"
+    ,"tabindex"
  ]
 
 exports = [
      "s"
     ,"(!)"
-    ,"(#)"
+    ,"(>>>)"
     ,"btag"
     ,"State"
     ,"Html"

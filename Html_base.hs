@@ -8,7 +8,7 @@ module Html_base (
     ,render
     ,atag
     ,(!)
-    ,(#)
+    ,(>>>)
 ) where
 
 import Prelude hiding (div,id,span)
@@ -68,7 +68,7 @@ tagit :: String -> String
 tagit t = "<" ++ t ++ ">"
 
 x ! y = x >>= (\st -> atfunc0 y)
-x # y = x >>= (\st -> y)
+x >>> y = x >>= (\st -> y)
 
 atfunc0 :: String -> State Html ()
 atfunc0 st = State ( \hd ->
