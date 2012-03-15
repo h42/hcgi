@@ -1,19 +1,21 @@
 import Control.Monad
 import Data.Monoid
 
-data State s a = State { runState :: s -> Either String (a,s) }
-		 | Sterr String
-
-{- instance Monad (State st) where
+{-
+    data State s a = State { runState :: s -> (a,s) }
+    instance Monad (State st) where
     return x = State $ \st -> (x,st)
     (State h) >>= f = State $ \st -> let (a, newState) = h st
 					 (State g) = f a
 				     in g newState
-    execState m st = snd (runState m st) -}
+    execState m st = snd (runState m st)
+-}
+
+
+newtype State s a = State { runState :: s -> Either String (a,s) }
 
 instance Monad (State st) where
     return x = State $ \st -> Right (x,st)
-    --return x = State $ \st -> Left "Hey"
 
     (State h) >>= f = State newf where
 	newf st =
@@ -22,7 +24,20 @@ instance Monad (State st) where
 		    Left s -> Left s
 		    Right (a, newState) -> runState (f a) newState
 
--- execState m st = snd (runState m st)
+execState m st = case (runState m st) of
+    Right (a,st') -> st'
+    Left s -> s
+
+push :: Int -> State [Int] Int
+push x = State $ \st -> Right (x,x:st)
+
+pop :: State [Int] Int
+pop = State $ \st -> case st of
+    [] -> Left "Out of stack"
+    (x:xs) -> Right (x,xs)
+
+test_state = do
+    print $ runState pop [1,2,3,4,5]
 
 
 ----------------------------
@@ -54,11 +69,13 @@ jlog0 = do
     c <- jlog1 3
     return (a+b+c)
 
-test_jloglog = do
+test_jlog = do
     print jlog0
     print $ jlog1 1 >> jlog1 2 >> jlog1 3
     print $ jlog1 1 >> jlog1 13 >> jlog1 3
 
 main = do
-    test_jloglog
+    test_jlog
+    putStrLn ""
+    test_state
     return ()
