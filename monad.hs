@@ -24,11 +24,8 @@ instance Monad (State st) where
 		    Left s -> Left s
 		    Right (a, newState) -> runState (f a) newState
 
-execState m st = case (runState m st) of
-    Right (a,st') -> st'
-    Left s -> s
-
 push :: Int -> State [Int] Int
+push 13 = State $ \st -> Left "Bad Luck"
 push x = State $ \st -> Right (x,x:st)
 
 pop :: State [Int] Int
@@ -36,8 +33,17 @@ pop = State $ \st -> case st of
     [] -> Left "Out of stack"
     (x:xs) -> Right (x,xs)
 
+map_st :: State [Int] Int
+map_st = do
+    mapM_ push [1..7]
+    return 0
+
 test_state = do
     print $ runState pop [1,2,3,4,5]
+    print $ runState pop [1]
+    print $ runState pop []
+    print $ runState (push 3 >> push 4) [1..5]
+    print $ runState (map_st >> push 13 >> map_st) []
 
 
 ----------------------------
@@ -75,7 +81,8 @@ test_jlog = do
     print $ jlog1 1 >> jlog1 13 >> jlog1 3
 
 main = do
+    putStrLn "Jlog Test"
     test_jlog
-    putStrLn ""
+    putStrLn "\nState Test"
     test_state
     return ()
