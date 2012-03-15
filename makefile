@@ -2,6 +2,11 @@ HSFLAGS = -O -fwarn-name-shadowing -static #-dynamic
 OBJS=Html_base.o Html.o Html_def.o
 PROGS=genx jpd
 
+.PHONY: all
+
+all:jpd monad
+
+monad:monad.hs
 
 jpd:jpd.hs $(OBJS)
 	ghc $(HSFLAGS) --make -o jpd jpd.hs
