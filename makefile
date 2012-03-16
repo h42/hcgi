@@ -1,10 +1,10 @@
-HSFLAGS = -O -fwarn-name-shadowing -static #-dynamic
+HSFLAGS = -O -fwarn-name-shadowing -static  #-dynamic
 OBJS=Html_base.o Html.o Html_def.o
 PROGS=genx jpd
 
 .PHONY: all
 
-all:jpd monad
+all:jpd monad mail
 
 monad:monad.hs
 

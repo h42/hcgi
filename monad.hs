@@ -49,40 +49,37 @@ test_state = do
 ----------------------------
 -- Jlog
 ----------------------------
-data Jlog w a = Jlog (a, w)
-    | LogErr String
-    deriving Show
+newtype Jlog w a = Jlog (Either String a, w) deriving Show
 
 instance (Monoid w) => Monad (Jlog w) where
-    return x = Jlog (x, mempty)
+    return x = Jlog (Right x, mempty)
 
-    (Jlog (x,v)) >>= f = ans where
+    (Jlog (Right x, v)) >>= f = ans where
 	ans = case f x of
-	  (Jlog (y,v')) -> Jlog (y, v `mappend` v')
-	  LogErr s -> LogErr s
+	  (Jlog (Right y, v'))  -> Jlog (Right y, (v `mappend` v'))
+	  (Jlog (Left s, v' ))   -> Jlog (Left s, v `mappend` v')
 
-    LogErr s >>= f = LogErr s
+    (Jlog (Left s, v)) >>= f = Jlog (Left s, v)
 
 jlog1 :: Int -> Jlog [String] Int
-jlog1 13 = LogErr "Unlucky"
-jlog1 x = Jlog (x,[show x])
+jlog1 13 =  Jlog (Left "Unlucky",[""])
+jlog1 x = Jlog (Right x,[show x])
 
 jlog0 :: Jlog [String] Int
 jlog0 = do
-    --return 0
-    a <- jlog1 1
-    b <- jlog1 2
-    c <- jlog1 3
-    return (a+b+c)
+    jlog1 1
+    jlog1 2
+    jlog1 13
+    jlog1 3
 
 test_jlog = do
     print jlog0
-    print $ jlog1 1 >> jlog1 2 >> jlog1 3
-    print $ jlog1 1 >> jlog1 13 >> jlog1 3
+    print $ jlog1 1 >> jlog1 2 >> jlog1 13 >> jlog1 3
 
 main = do
     putStrLn "Jlog Test"
     test_jlog
-    putStrLn "\nState Test"
-    test_state
+
+    --putStrLn "\nState Test"
+    --test_state
     return ()
