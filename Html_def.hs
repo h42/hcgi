@@ -16,18 +16,19 @@ def_xmlns = "http://www.w3.org/1999/xhtml"
 def_doctype = btag
      "!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\""
 
-def_html :: String -> State Html () -> State Html ()
-def_html mytitle mysub = do
+def_html :: String -> State Html () -> State Html () -> State Html ()
+def_html mytitle mystyle mybody = do
     def_doctype
-    html ! xmlns def_xmlns
+    html % xmlns def_xmlns
 
     h_head
-    meta ! http_equiv "Content-Type"  ! content "text/html;charset=utf-8"  !  "/"
+    meta % http_equiv "Content-Type"  % content "text/html;charset=utf-8"  %  "/"
     h_title >>> s  mytitle >>> h_title_
+    mystyle
     h_head_
 
     body
-    mysub
+    mybody
     body_
     html_
 

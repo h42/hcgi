@@ -25,6 +25,7 @@ tags = [
     ,"q"
     ,"small"
     ,"span"
+    ,"style"
     ,"sub"
     ,"super"
     ,"h_title"
@@ -53,11 +54,12 @@ attrs = [
     ,"width"
     ,"src"
     ,"tabindex"
+    ,"h_type"
  ]
 
 exports = [
      "s"
-    ,"(!)"
+    ,"(%)"
     ,"(>>>)"
     ,"btag"
     ,"State"

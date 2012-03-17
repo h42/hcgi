@@ -2,7 +2,17 @@ import Html
 import Html_def
 import Prelude hiding (id,div,span)
 
-myhtml= do
+mystyle = do
+    style % h_type "text/css"
+    s"h3 {color:blue}"
+    s"img{border:4px solid red;}"
+    s"div[class] {color:red}"
+    s"div#simple  {color:green}"
+    --s"div#simple h3 {color:blue}"
+    s"p.par1 {color:red}"
+    style_
+
+myhtml = do
     h1
     s "HCGI Demo Program"
     h1_
@@ -11,22 +21,22 @@ myhtml= do
 	h3 >>> s"Table of Contents" >>> h3_
 	p >>> blockquote
 
-	a !href "#simple" >>> s"Simple Formatting" >>> a_
+	a %href "#simple" >>> s"Simple Formatting" >>> a_
 	br
-	a !href "#preformatted" >>> s"Preformatted Text" >>> a_
+	a %href "#preformatted" >>> s"Preformatted Text" >>> a_
 	br
-	a !href "#bigsmall" >>> s"Big / Small Text" >>> a_
+	a %href "#bigsmall" >>> s"Big / Small Text" >>> a_
 	br
-	a !href "#images" >>> s"Images" >>> a_
+	a %href "#images" >>> s"Images" >>> a_
 	br
 
-	a ! href "http://stackoverflow.com/questions/tagged/haskell"
-	  ! accesskey "o" ! tabindex "2"
+	a % href "http://stackoverflow.com/questions/tagged/haskell"
+	  % accesskey "o" % tabindex "2"
 	s "A link to " >>> b >>> s"stackoverflow" >>> b_
 	a_ >>> br
 
-	a ! href "http://www.reddit.com/r/haskell/"
-	  ! accesskey "r" ! tabindex "1"
+	a % href "http://www.reddit.com/r/haskell/"
+	  % accesskey "r" % tabindex "1"
 	s "A link to " >>> b >>> s"reddit/r/haskell" >>> b_
 	a_
 	br
@@ -34,17 +44,17 @@ myhtml= do
 	blockquote_ >>> p_
     div_
 
-    a ! name "simple" ! "/"
-    div >>> do -- Simple formatting
+    a % name "simple" % "/"
+    div % id "simple" >>> do -- Simple formatting
 	h3>>>s"Simple Formatting" >>>h3_
-	p
+	p % h_class "par1"
 	s "This is the first paragraph. we can" >>> b >>> s"bold" >>> b_
 	s "things or" >>> i >>> s"italicize things." >>> i_
 	br
 	s "This sample program will eventually show a great many features"
 	s "of html"
 
-	span ! h_class "span 1"
+	span % h_class "span 1"
 	br
 	s"This sentence is enclosed in a span which we can format separately"
 	br
@@ -58,7 +68,7 @@ myhtml= do
 	p_
     div_
 
-    a ! name "preformatted" ! "/"
+    a % name "preformatted" % "/"
     div >>> do -- Preformatted text
 	h3 >>> s"Preformatted Text" >>> h3_
 	p
@@ -71,8 +81,8 @@ myhtml= do
 	p_
     div_
 
-    a ! name "bigsmall" ! "/"
-    div >>> do -- Big / Small
+    a % name "bigsmall" % "/"
+    div % h_class "bigsmall" >>> do -- Big / Small
 	h3 >>> s"Demonstrate big/small" >>> h3_
 	small >>> s"this is small line 1." >>> small_
 	br >>> s"Normal line 1"
@@ -82,14 +92,14 @@ myhtml= do
 	br >>> big >>> s sval >>> big_
     div_
 
-    a ! name "images" ! "/"
+    a % name "images" % "/"
     div >>> do
 	h3 >>> s"Demonstrate Simple Images" >>> h3_
 	p
 	s"This is a caption for the image."
 	br
-	img ! src "http://localhost/plumber.jpg" ! alt "plumber.jpg"
-	    ! width "150" ! height  "180" ! title "Plumber" ! "/"
+	img % src "http://localhost/plumber.jpg" % alt "plumber.jpg"
+	    % width "150" % height  "180" % title "Plumber" % "/"
 	br
 	s"This should go under the image"
 	p_
@@ -105,5 +115,5 @@ mycode = do
 
 main = do
     --s <- readFile "jpd.hs"
-    putStr $ def_http_hdr ++ render (def_html "Test Page" myhtml )
+    putStr $ def_http_hdr ++ render (def_html "Test Page" mystyle myhtml )
 

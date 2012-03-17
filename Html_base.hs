@@ -7,7 +7,7 @@ module Html_base (
     ,etag
     ,render
     ,atag
-    ,(!)
+    ,(%)
     ,(>>>)
 ) where
 
@@ -67,7 +67,7 @@ etagit t = "</" ++ t ++ ">"
 tagit :: String -> String
 tagit t = "<" ++ t ++ ">"
 
-x ! y = x >>= (\st -> atfunc0 y)
+x % y = x >>= (\st -> atfunc0 y)
 x >>> y = x >>= (\st -> y)
 
 atfunc0 :: String -> State Html ()
