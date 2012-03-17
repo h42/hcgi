@@ -10,6 +10,7 @@ mystyle = do
     s"div#simple  {color:green}"
     --s"div#simple h3 {color:blue}"
     s"p.par1 {color:red}"
+    s"#table {color:aqua}"
     style_
 
 myhtml = do
@@ -21,6 +22,8 @@ myhtml = do
 	h3 >>> s"Table of Contents" >>> h3_
 	p >>> blockquote
 
+	a %href "#table" >>> s"Table" >>> a_
+	br
 	a %href "#simple" >>> s"Simple Formatting" >>> a_
 	br
 	a %href "#preformatted" >>> s"Preformatted Text" >>> a_
@@ -42,6 +45,20 @@ myhtml = do
 	br
 
 	blockquote_ >>> p_
+    div_
+
+    a % name "table" % "/"
+    div % id "table" >>> do
+	h3 >>> s"Table Example" >>> h3_
+	table % "border=2" >>> do
+	    tr >>> do
+		td >>> s"table 1 1"
+		td >>> s"table 1 2"
+	    tr >>> do
+		td >>> s"table 2 1"
+		td >>> s"table 2 2"
+	    tr_
+	table_
     div_
 
     a % name "simple" % "/"

@@ -28,6 +28,9 @@ tags = [
     ,"style"
     ,"sub"
     ,"super"
+    ,"table"
+    ,"td"
+    ,"tr"
     ,"h_title"
  ]
 
@@ -46,6 +49,7 @@ attrs = [
     ,"accesskey"
     ,"align"
     ,"alt"
+    ,"border"
     ,"cite"
     ,"content"
     ,"height"

@@ -4,7 +4,7 @@ PROGS=genx jpd
 
 .PHONY: all
 
-all:jpd monad mail
+all:jpd monad color
 
 monad:monad.hs
 
@@ -30,7 +30,8 @@ Html.hs:genx
 % : %.hs
 	ghc $(HSFLAGS) --make -o $@ $<
 
-install:
+install:color jpd
+	install -m 755 -o apache -g apache color  /var/www/cgi-bin
 	install -m 755 -o apache -g apache jpd  /var/www/cgi-bin
 	install -m 755 -o apache -g apache plumber.jpg  /var/www/html
 	ls -l /var/www/cgi-bin

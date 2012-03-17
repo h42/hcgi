@@ -1,6 +1,5 @@
 module Html_def (
-    def_xmlns
-    ,def_doctype
+     def_doctype
     ,def_http_hdr
     ,def_html
 ) where
@@ -12,14 +11,14 @@ import Html
 def_http_hdr :: String
 def_http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
 
+-- <html> attribute if you want to conform to XHTML
 def_xmlns = "http://www.w3.org/1999/xhtml"
-def_doctype = btag
-     "!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\""
+def_doctype = btag "!DOCTYPE HTML"
 
 def_html :: String -> State Html () -> State Html () -> State Html ()
 def_html mytitle mystyle mybody = do
     def_doctype
-    html % xmlns def_xmlns
+    html
 
     h_head
     meta % http_equiv "Content-Type"  % content "text/html;charset=utf-8"  %  "/"
