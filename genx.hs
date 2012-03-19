@@ -12,14 +12,18 @@ tags = [
     ,"center"
     ,"del"
     ,"div"
+    ,"form"
     ,"h_head"
     ,"html"
     ,"h1","h2","h3","h4","h5","h6"
     ,"hr" -- horizontal rule  --  attrs deprecated
     ,"i"
+    ,"input"
     ,"img"
     ,"ins"
+    ,"li"
     ,"meta"
+    ,"ol"
     ,"p"
     ,"pre"
     ,"q"
@@ -32,6 +36,7 @@ tags = [
     ,"td"
     ,"tr"
     ,"h_title"
+    ,"ul"
  ]
 
 etags = [
@@ -47,6 +52,7 @@ attrs = [
     ,"http_equiv"
 
     ,"accesskey"
+    ,"action"
     ,"align"
     ,"alt"
     ,"border"
@@ -54,11 +60,16 @@ attrs = [
     ,"content"
     ,"height"
     ,"href"
+    ,"maxlength"
+    ,"method"
     ,"name"
     ,"width"
+    ,"size"
     ,"src"
+    ,"start"
     ,"tabindex"
     ,"h_type"
+    ,"value"
  ]
 
 exports = [

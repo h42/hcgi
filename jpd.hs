@@ -4,13 +4,22 @@ import Prelude hiding (id,div,span)
 
 mystyle = do
     style % h_type "text/css"
+
+    s"body {background-color:#f8f8f8;color:green;}"
+
     s"h3 {color:blue}"
     s"img{border:4px solid red;}"
-    s"div[class] {color:red}"
-    s"div#simple  {color:green}"
-    --s"div#simple h3 {color:blue}"
-    s"p.par1 {color:red}"
-    s"#table {color:aqua}"
+
+    s"div.bigsmall {color:navy}"
+    s"div.bigsmall h3 {color:navy}"
+
+    s"div#simple  {color:navy}"
+    s"p.par1 {color:blue}"
+
+    s"li {color:blue}"
+    s"ol li {color:navy}"
+    -- s"#table {color:aqua}"
+
     style_
 
 myhtml = do
@@ -18,17 +27,22 @@ myhtml = do
     s "HCGI Demo Program"
     h1_
 
+---------------------------
+-- Table of COntents
+---------------------------
     div >>> do
 	h3 >>> s"Table of Contents" >>> h3_
 	p >>> blockquote
 
-	a %href "#table" >>> s"Table" >>> a_
-	br
 	a %href "#simple" >>> s"Simple Formatting" >>> a_
 	br
 	a %href "#preformatted" >>> s"Preformatted Text" >>> a_
 	br
 	a %href "#bigsmall" >>> s"Big / Small Text" >>> a_
+	br
+	a %href "#list" >>> s"List" >>> a_
+	br
+	a %href "#table" >>> s"Table" >>> a_
 	br
 	a %href "#images" >>> s"Images" >>> a_
 	br
@@ -41,12 +55,51 @@ myhtml = do
 	a % href "http://www.reddit.com/r/haskell/"
 	  % accesskey "r" % tabindex "1"
 	s "A link to " >>> b >>> s"reddit/r/haskell" >>> b_
-	a_
-	br
+	a_ >>> br
 
+	a % href "http://http://ALG_3rd.pdf"
+	s "A link to a" >>> b >>> s"PDF" >>> b_ >>> s"on my computer"
+	a_ >>> br
 	blockquote_ >>> p_
     div_
 
+---------------------------
+-- List
+---------------------------
+    a % name "list" % "/"
+    div >>> do
+	h3 >>> s"List Example" >>> h3_
+	ul >> do
+	p >>> li >>> do
+	    s"This is a list item"
+	    ol >>> do
+		li >>> s"This is a list item"
+		li >>> s"This is a list item"
+		li >>> s"This is a list item"
+	    ol_
+	li_
+	p >>> li >>> do
+	    s"This is a list item"
+	    ol >>> do
+		li >>> s"This is a list item"
+		li >>> s"This is a list item"
+		li >>> s"This is a list item"
+	    ol_
+	li_
+	p >>> li >>> do
+	    s"This is a list item"
+	    ol >>> do
+		li >>> s"This is a list item"
+		li >>> s"This is a list item"
+		li >>> s"This is a list item"
+	    ol_
+	li_
+	ul_
+    div_
+
+---------------------------
+-- TABLE
+---------------------------
     a % name "table" % "/"
     div % id "table" >>> do
 	h3 >>> s"Table Example" >>> h3_
@@ -61,6 +114,9 @@ myhtml = do
 	table_
     div_
 
+---------------------------
+-- Simple
+---------------------------
     a % name "simple" % "/"
     div % id "simple" >>> do -- Simple formatting
 	h3>>>s"Simple Formatting" >>>h3_
@@ -85,6 +141,9 @@ myhtml = do
 	p_
     div_
 
+---------------------------
+-- PRE
+---------------------------
     a % name "preformatted" % "/"
     div >>> do -- Preformatted text
 	h3 >>> s"Preformatted Text" >>> h3_
@@ -98,9 +157,12 @@ myhtml = do
 	p_
     div_
 
+---------------------------
+-- BIG/SMALL
+---------------------------
     a % name "bigsmall" % "/"
     div % h_class "bigsmall" >>> do -- Big / Small
-	h3 >>> s"Demonstrate big/small" >>> h3_
+	h3  >>> s"Demonstrate big/small" >>> h3_
 	small >>> s"this is small line 1." >>> small_
 	br >>> s"Normal line 1"
 	br >>> s"Normal line 2"
@@ -109,6 +171,9 @@ myhtml = do
 	br >>> big >>> s sval >>> big_
     div_
 
+---------------------------
+-- IMAGE
+---------------------------
     a % name "images" % "/"
     div >>> do
 	h3 >>> s"Demonstrate Simple Images" >>> h3_

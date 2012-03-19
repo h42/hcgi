@@ -4,7 +4,7 @@ PROGS=genx jpd
 
 .PHONY: all
 
-all:jpd monad color
+all:jpd monad color form
 
 monad:monad.hs
 
@@ -32,8 +32,10 @@ Html.hs:genx
 
 install:color jpd
 	install -m 755 -o apache -g apache color  /var/www/cgi-bin
+	install -m 755 -o apache -g apache form  /var/www/cgi-bin
 	install -m 755 -o apache -g apache jpd  /var/www/cgi-bin
 	install -m 755 -o apache -g apache plumber.jpg  /var/www/html
+	install -m 755 -o apache -g apache ALG_3rd.pdf  /var/www/html
 	ls -l /var/www/cgi-bin
 
 clean:
