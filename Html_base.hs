@@ -7,7 +7,7 @@ module Html_base (
     ,etag
     ,render
     ,atag
-    ,(%)
+    ,(#)
     ,(>>>)
 ) where
 
@@ -23,13 +23,29 @@ instance Monad (State st) where
 				     in g newState
 execState m st = snd (runState m st)
 
-data Html = Html {ztags :: [String], pcnt :: Int}
+data Html = Html {ztags :: [String]
+		 ,pcnt :: Int
+		 ,zetags :: [(String,Int)]
+		 }
 
 btag :: String -> State Html ()
 btag t = State (\hd -> btag' t hd)
 btag' t hd =
-    let ztags' = ("<" ++ t ++ ">") : ztags hd
+    let ztags' = (tagit t) : ztags hd
     in ((),hd{ztags=ztags'})
+
+etag :: String -> State Html ()
+etag t = State (\hd -> etag' t hd)
+etag' t hd =
+    let ztags' = (etagit t) : ztags hd
+    in ((),hd{ztags=ztags'})
+
+subtag :: String -> String -> State Html ()
+subtag t xs = State (\hd -> subtag' t xs hd)
+subtag' t xs hd =
+    let ztags' = (tagit t ++ xs ++ etagit t) : ztags hd
+    in ((),hd{ztags=ztags'})
+
 
 s :: String -> State Html ()
 s x = State (\hd -> ((),hd {ztags=x:(ztags hd)}))
@@ -45,7 +61,6 @@ p_etag = State (\hd -> p_etag' hd)
 p_etag' hd = btag' "/p" hd{pcnt=pcnt hd-1}
 
 
-etag t = btag ('/':t)
 
 {-
 etag1 :: String -> State Html ()
@@ -67,8 +82,8 @@ etagit t = "</" ++ t ++ ">"
 tagit :: String -> String
 tagit t = "<" ++ t ++ ">"
 
-x % y = x >>= (\st -> atfunc0 y)
 x >>> y = x >>= (\st -> y)
+x # y = x >>= (\st -> atfunc0 y)
 
 atfunc0 :: String -> State Html ()
 atfunc0 st = State ( \hd ->
@@ -82,7 +97,7 @@ atag :: String -> String -> String
 atag var val = var ++ ("=\"" ++ val ++  "\"")
 
 html0 :: Html -- KEEP for accurate error messages if Html changed
-html0 = Html [] 0
+html0 = Html [] 0 []
 
 render :: State Html () -> String
 render (hf) = str where

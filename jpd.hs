@@ -3,7 +3,7 @@ import Html_def
 import Prelude hiding (id,div,span)
 
 mystyle = do
-    style % h_type "text/css"
+    style # h_type "text/css"
 
     s"body {background-color:#f8f8f8;color:green;}"
 
@@ -31,33 +31,33 @@ myhtml = do
 -- Table of COntents
 ---------------------------
     div >>> do
-	h3 >>> s"Table of Contents" >>> h3_
+	h3' "Table of Contents"
 	p >>> blockquote
 
-	a %href "#simple" >>> s"Simple Formatting" >>> a_
+	a #href "#simple" >>> s"Simple Formatting" >>> a_
 	br
-	a %href "#preformatted" >>> s"Preformatted Text" >>> a_
+	a #href "#preformatted" >>> s"Preformatted Text" >>> a_
 	br
-	a %href "#bigsmall" >>> s"Big / Small Text" >>> a_
+	a #href "#bigsmall" >>> s"Big / Small Text" >>> a_
 	br
-	a %href "#list" >>> s"List" >>> a_
+	a #href "#list" >>> s"List" >>> a_
 	br
-	a %href "#table" >>> s"Table" >>> a_
+	a #href "#table" >>> s"Table" >>> a_
 	br
-	a %href "#images" >>> s"Images" >>> a_
+	a #href "#images" >>> s"Images" >>> a_
 	br
 
-	a % href "http://stackoverflow.com/questions/tagged/haskell"
-	  % accesskey "o" % tabindex "2"
+	a # href "http://stackoverflow.com/questions/tagged/haskell"
+	  # accesskey "o" # tabindex "2"
 	s "A link to " >>> b >>> s"stackoverflow" >>> b_
 	a_ >>> br
 
-	a % href "http://www.reddit.com/r/haskell/"
-	  % accesskey "r" % tabindex "1"
+	a # href "http://www.reddit.com/r/haskell/"
+	   # accesskey "r" # tabindex "1"
 	s "A link to " >>> b >>> s"reddit/r/haskell" >>> b_
 	a_ >>> br
 
-	a % href "http://http://ALG_3rd.pdf"
+	a # href "http://http://ALG_3rd.pdf"
 	s "A link to a" >>> b >>> s"PDF" >>> b_ >>> s"on my computer"
 	a_ >>> br
 	blockquote_ >>> p_
@@ -66,9 +66,9 @@ myhtml = do
 ---------------------------
 -- List
 ---------------------------
-    a % name "list" % "/"
+    a # id "list" # "/"
     div >>> do
-	h3 >>> s"List Example" >>> h3_
+	h3'"List Example"
 	ul >> do
 	p >>> li >>> do
 	    s"This is a list item"
@@ -100,10 +100,10 @@ myhtml = do
 ---------------------------
 -- TABLE
 ---------------------------
-    a % name "table" % "/"
-    div % id "table" >>> do
-	h3 >>> s"Table Example" >>> h3_
-	table % "border=2" >>> do
+    a # id "table" # "/"
+    div # id "table" >>> do
+	h3'"Table Example"
+	table # "border=2" >>> do
 	    tr >>> do
 		td >>> s"table 1 1"
 		td >>> s"table 1 2"
@@ -117,17 +117,17 @@ myhtml = do
 ---------------------------
 -- Simple
 ---------------------------
-    a % name "simple" % "/"
-    div % id "simple" >>> do -- Simple formatting
-	h3>>>s"Simple Formatting" >>>h3_
-	p % h_class "par1"
+    a # id "simple" # "/"
+    div # id "simple" >>> do -- Simple formatting
+	h3' "Simple Formatting"
+	p # h_class "par1"
 	s "This is the first paragraph. we can" >>> b >>> s"bold" >>> b_
 	s "things or" >>> i >>> s"italicize things." >>> i_
 	br
 	s "This sample program will eventually show a great many features"
 	s "of html"
 
-	span % h_class "span 1"
+	span # h_class "span 1"
 	br
 	s"This sentence is enclosed in a span which we can format separately"
 	br
@@ -144,9 +144,9 @@ myhtml = do
 ---------------------------
 -- PRE
 ---------------------------
-    a % name "preformatted" % "/"
+    a # id "preformatted" # "/"
     div >>> do -- Preformatted text
-	h3 >>> s"Preformatted Text" >>> h3_
+	h3' "Preformatted Text"
 	p
 	s"This paragraph will be used to demonstrate preformatted code."
 	--br
@@ -157,43 +157,43 @@ myhtml = do
 	p_
     div_
 
----------------------------
--- BIG/SMALL
----------------------------
-    a % name "bigsmall" % "/"
-    div % h_class "bigsmall" >>> do -- Big / Small
-	h3  >>> s"Demonstrate big/small" >>> h3_
-	small >>> s"this is small line 1." >>> small_
-	br >>> s"Normal line 1"
-	br >>> s"Normal line 2"
-	br >>> s"Normal line 3"
-	let sval = "this is big line 1"
-	br >>> big >>> s sval >>> big_
-    div_
-
----------------------------
--- IMAGE
----------------------------
-    a % name "images" % "/"
-    div >>> do
-	h3 >>> s"Demonstrate Simple Images" >>> h3_
-	p
-	s"This is a caption for the image."
-	br
-	img % src "http://localhost/plumber.jpg" % alt "plumber.jpg"
-	    % width "150" % height  "180" % title "Plumber" % "/"
-	br
-	s"This should go under the image"
-	p_
-    div_
-
-
 mycode = do
     s "close2 :: String -> [String] -> [String] -> ([String],[String])"
     s "close2 s tags []  = (tags,[])"
     s "close2 s (e:es) tags"
     s "    | s == e    = ((etagit s):tags,es)"
     s "    | otherwise = close2 s es (etagit s:tags)"
+
+---------------------------
+-- BIG/SMALL
+---------------------------
+    a # id "bigsmall" # "/"
+    div # h_class "bigsmall" >>> do -- Big / Small
+	h3' "Demonstrate big/small"
+	small >>> s"this is small line 1." >>> small_
+	br >>> s"Normal line 1"
+	br >>> s"Normal line 2"
+	br >>> s"Normal line 3"
+	let sval = "this is big line 1"
+	br >>> span # h_class "bigtext" >>> s sval >>> span_
+    div_
+
+---------------------------
+-- IMAGE
+---------------------------
+    a # id "images" # "/"
+    div >>> do
+	h3' "Demonstrate Simple Images"
+	p
+	s"This is a caption for the image."
+	br
+	img # src "http://localhost/plumber.jpg" # alt "plumber.jpg"
+	    # width "150" # height  "180" # title "Plumber" # "/"
+	br
+	s"This should go under the image"
+	p_
+    div_
+
 
 main = do
     --s <- readFile "jpd.hs"

@@ -4,12 +4,9 @@ import System.IO
 tags = [
      "a"
     ,"abbr"
-    ,"acronym"
     ,"b"
-    ,"big"
     ,"blockquote"
     ,"body"
-    ,"center"
     ,"del"
     ,"div"
     ,"form"
@@ -18,8 +15,8 @@ tags = [
     ,"h1","h2","h3","h4","h5","h6"
     ,"hr" -- horizontal rule  --  attrs deprecated
     ,"i"
-    ,"input"
     ,"img"
+    ,"input"
     ,"ins"
     ,"li"
     ,"meta"
@@ -39,9 +36,18 @@ tags = [
     ,"ul"
  ]
 
-etags = [
+xetags = [
     "br"
  ]
+
+stags = [
+    "b"
+    ,"h1","h2","h3","h4","h5","h6"
+    ,"i"
+    ,"q"
+    ,"sub"
+    ,"super"
+  ]
 
 --
 -- Note - functions for attrs are not necessary for literals such as
@@ -74,7 +80,7 @@ attrs = [
 
 exports = [
      "s"
-    ,"(%)"
+    ,"(#)"
     ,"(>>>)"
     ,"btag"
     ,"State"
@@ -89,7 +95,9 @@ gen_mod =
     ++ "module Html (\n"
     ++  "    " ++ drop 5 (concatMap (\t-> "    ," ++ t ++  ',':t ++ "_\n") tags)
     ++  "\n"
-    ++  (concatMap (\t-> "    ," ++ t ++ "\n") etags)
+    ++  (concatMap (\t-> "    ," ++ t ++ "\n") xetags)
+    ++  "\n"
+    ++  (concatMap (\t-> "    ," ++ t ++ "'\n") stags)
     ++  "\n"
     ++  (concatMap (\t-> "    ," ++ t ++ "\n") attrs)
     ++  "\n"
@@ -100,13 +108,20 @@ gen_funcs =
     "\n------ Functions --------------\n"
     ++  concatMap fstr tags
     ++ "\n"
-    ++ concatMap estr etags
+    ++ concatMap estr xetags
+    ++ "\n"
+    ++  concatMap sstr stags
     ++ "\n"
     ++  concatMap astr attrs
+
   where fstr f = f  ++  "  = btag "  ++ (show.fix) f  ++  "\n"
 	      ++ f  ++  "_ = etag "  ++ (show.fix) f  ++  "\n"
 	estr f = f  ++  " = btag \""  ++  fix f  ++  " /\"\n"
 	astr f = f  ++  " val = atag "  ++  (show.fix) f  ++  " val\n"
+	sstr f = f  ++  "' sx  = do\n"
+	    ++ "    btag \""  ++  f  ++  "\"\n"
+	    ++ "    s sx\n"
+	    ++ "    etag \""  ++  f  ++  "\"\n"
 
 	fix ('h' : '_' : xs) = xs
 	fix xs = xs
