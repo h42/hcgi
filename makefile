@@ -8,6 +8,10 @@ all:jpd monad color form
 
 monad:monad.hs
 
+color:jpd
+
+form:jpd
+
 jpd:jpd.hs $(OBJS)
 	ghc $(HSFLAGS) --make -o jpd jpd.hs
 

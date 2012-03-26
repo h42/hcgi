@@ -24,22 +24,46 @@ instance Monad (State st) where
 execState m st = snd (runState m st)
 
 data Html = Html {ztags :: [String]
-		 ,pcnt :: Int
 		 ,zetags :: [(String,Int)]
 		 }
+---------------------
+-- BTAG
+---------------------
+btag :: String -> Int -> State Html ()
+btag t pri = State (\hd -> btag' t pri hd)
 
-btag :: String -> State Html ()
-btag t = State (\hd -> btag' t hd)
-btag' t hd =
-    let ztags' = (tagit t) : ztags hd
-    in ((),hd{ztags=ztags'})
+btag' t 0 hd = ((), hd{ztags=tagit t : ztags hd})
+btag' t pri hd@(Html tags []) = ((),hd{ztags=tagit t : tags, zetags=[(t,pri)]})
 
-etag :: String -> State Html ()
-etag t = State (\hd -> etag' t hd)
-etag' t hd =
+btag' t pri hd@(Html tags etags@((t2,p2):es))
+    | p2 > pri    = ((),hd{ztags=tagit t:tags, zetags=(t,pri):etags})
+    | p2 < pri    = btag' t pri hd{ztags=etagit t2:tags, zetags=es}
+    | p2 == pri   = ( (), hd{ztags=tagit t2:etagit t2:tags} )
+
+---------------------
+-- ETAG
+---------------------
+etag :: String -> Int -> State Html ()
+etag t 0 = State (\hd -> etag0 t 0 hd)
+etag t pri = State (\hd -> etag' t pri hd)
+
+  -- NO AUTO CLOSE
+etag0 t pri hd =
     let ztags' = (etagit t) : ztags hd
     in ((),hd{ztags=ztags'})
 
+  -- AUTO CLOSE
+etag' t pri hd@(Html tags []) = ((),hd) -- error state
+
+etag' t p hd@(Html tags ((t2,p2):es))
+    | p2 < p    = etag' t p hd{ztags=etagit t2:tags, zetags=es}
+    | p2 == p   = ((),hd{ztags=etagit t2:tags, zetags=es})
+     -- did ot find tag but add anyway ???
+    | otherwise = ((),hd{ztags=etagit t:tags})
+
+---------------------
+-- SUBTAG
+---------------------
 subtag :: String -> String -> State Html ()
 subtag t xs = State (\hd -> subtag' t xs hd)
 subtag' t xs hd =
@@ -49,18 +73,6 @@ subtag' t xs hd =
 
 s :: String -> State Html ()
 s x = State (\hd -> ((),hd {ztags=x:(ztags hd)}))
-
-p_open :: State Html ()
-p_open = State (\hd -> p_open' hd)
-p_open' hd
-    | (pcnt hd) > 0 = let ztags' = (etagit "p" ++ tagit "p") :ztags hd
-		      in ((),hd{ztags=ztags'})
-    | otherwise   = btag' "p" hd{pcnt=pcnt hd+1}
-
-p_etag = State (\hd -> p_etag' hd)
-p_etag' hd = btag' "/p" hd{pcnt=pcnt hd-1}
-
-
 
 {-
 etag1 :: String -> State Html ()
@@ -97,12 +109,12 @@ atag :: String -> String -> String
 atag var val = var ++ ("=\"" ++ val ++  "\"")
 
 html0 :: Html -- KEEP for accurate error messages if Html changed
-html0 = Html [] 0 []
+html0 = Html [] []
 
 render :: State Html () -> String
 render (hf) = str where
     hd = execState hf (html0)
     hs = reverse (ztags hd)
-    str = foldr f "" hs
+    str = foldr f "" hs  ++ show (zetags hd)
     f xx a = xx ++ ('\n':a)
 

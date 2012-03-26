@@ -26,7 +26,7 @@ cs1 = map
  colors
 
 myhtml = do
-    h1 % "style=color:red" >>> s"Color Test Program" >>> h1_
+    h1 # "style=color:red" >>> s"Color Test Program" >>> h1_
     table
     tr
     mapM_ s (intersperse "<tr>" cs1)

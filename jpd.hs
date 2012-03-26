@@ -12,6 +12,7 @@ mystyle = do
 
     s"div.bigsmall {color:navy}"
     s"div.bigsmall h3 {color:navy}"
+    s".bigtext {font-size:120%}"
 
     s"div#simple  {color:navy}"
     s"p.par1 {color:blue}"
@@ -21,6 +22,13 @@ mystyle = do
     -- s"#table {color:aqua}"
 
     style_
+
+mycode = do  -- used for preformatted demo
+    s "close2 :: String -> [String] -> [String] -> ([String],[String])"
+    s "close2 s tags []  = (tags,[])"
+    s "close2 s (e:es) tags"
+    s "    | s == e    = ((etagit s):tags,es)"
+    s "    | otherwise = close2 s es (etagit s:tags)"
 
 myhtml = do
     h1
@@ -60,8 +68,8 @@ myhtml = do
 	a # href "http://http://ALG_3rd.pdf"
 	s "A link to a" >>> b >>> s"PDF" >>> b_ >>> s"on my computer"
 	a_ >>> br
-	blockquote_ >>> p_
-    div_
+	blockquote_
+    --div_
 
 ---------------------------
 -- List
@@ -69,33 +77,33 @@ myhtml = do
     a # id "list" # "/"
     div >>> do
 	h3'"List Example"
-	ul >> do
-	p >>> li >>> do
-	    s"This is a list item"
-	    ol >>> do
-		li >>> s"This is a list item"
-		li >>> s"This is a list item"
-		li >>> s"This is a list item"
-	    ol_
-	li_
-	p >>> li >>> do
-	    s"This is a list item"
-	    ol >>> do
-		li >>> s"This is a list item"
-		li >>> s"This is a list item"
-		li >>> s"This is a list item"
-	    ol_
-	li_
-	p >>> li >>> do
-	    s"This is a list item"
-	    ol >>> do
-		li >>> s"This is a list item"
-		li >>> s"This is a list item"
-		li >>> s"This is a list item"
-	    ol_
-	li_
+	ul >>> do
+	    p >>> li >>> do
+		s"This is a list item"
+		ol >>> do
+		    li >>> s"This is a list item"
+		    li >>> s"This is a list item"
+		    li >>> s"This is a list item"
+		ol_
+	    li_
+	    p >>> li >>> do
+		s"This is a list item"
+		ol >>> do
+		    li >>> s"This is a list item"
+		    li >>> s"This is a list item"
+		    li >>> s"This is a list item"
+		ol_
+	    li_
+	    p >>> li >>> do
+		s"This is a list item"
+		ol >>> do
+		    li >>> s"This is a list item"
+		    li >>> s"This is a list item"
+		    li >>> s"This is a list item"
+		ol_
+	    li_
 	ul_
-    div_
+    --div_
 
 ---------------------------
 -- TABLE
@@ -112,7 +120,7 @@ myhtml = do
 		td >>> s"table 2 2"
 	    tr_
 	table_
-    div_
+    --div_
 
 ---------------------------
 -- Simple
@@ -138,8 +146,7 @@ myhtml = do
 	    s "This sentence is just here to fill up space so we can test links better."
 	    br) [1..20]
 
-	p_
-    div_
+    --div_
 
 ---------------------------
 -- PRE
@@ -149,34 +156,30 @@ myhtml = do
 	h3' "Preformatted Text"
 	p
 	s"This paragraph will be used to demonstrate preformatted code."
-	--br
 	s"like this code snippet"
 	pre
 	mycode
 	pre_
-	p_
-    div_
-
-mycode = do
-    s "close2 :: String -> [String] -> [String] -> ([String],[String])"
-    s "close2 s tags []  = (tags,[])"
-    s "close2 s (e:es) tags"
-    s "    | s == e    = ((etagit s):tags,es)"
-    s "    | otherwise = close2 s es (etagit s:tags)"
+    --div_
 
 ---------------------------
 -- BIG/SMALL
 ---------------------------
     a # id "bigsmall" # "/"
     div # h_class "bigsmall" >>> do -- Big / Small
+	p
 	h3' "Demonstrate big/small"
-	small >>> s"this is small line 1." >>> small_
+	small' "this is small line 1."
+	br >>> small' "this is small line 2."
+	p
 	br >>> s"Normal line 1"
 	br >>> s"Normal line 2"
+	p
 	br >>> s"Normal line 3"
-	let sval = "this is big line 1"
+	p
+	let sval = "this will be big line 1 when I set BIG style"
 	br >>> span # h_class "bigtext" >>> s sval >>> span_
-    div_
+    --div_
 
 ---------------------------
 -- IMAGE
@@ -191,8 +194,6 @@ mycode = do
 	    # width "150" # height  "180" # title "Plumber" # "/"
 	br
 	s"This should go under the image"
-	p_
-    div_
 
 
 main = do

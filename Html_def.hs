@@ -13,7 +13,7 @@ def_http_hdr = "Content-type: " ++ "text/html" ++ "; charset=utf-8\n\n"
 
 -- <html> attribute if you want to conform to XHTML
 def_xmlns = "http://www.w3.org/1999/xhtml"
-def_doctype = btag "!DOCTYPE HTML"
+def_doctype = btag "!DOCTYPE HTML" 0
 
 def_html :: String -> State Html () -> State Html () -> State Html ()
 def_html mytitle mystyle mybody = do
