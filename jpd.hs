@@ -38,36 +38,36 @@ myhtml = do
 ---------------------------
 -- Table of COntents
 ---------------------------
-    div >>> do
+    div >> do
 	h3' "Table of Contents"
-	p >>> blockquote
+	p >> blockquote
 
-	a #href "#simple" >>> s"Simple Formatting" >>> a_
+	a #href "#simple" >> s"Simple Formatting" >> a_
 	br
-	a #href "#preformatted" >>> s"Preformatted Text" >>> a_
+	a #href "#preformatted" >> s"Preformatted Text" >> a_
 	br
-	a #href "#bigsmall" >>> s"Big / Small Text" >>> a_
+	a #href "#bigsmall" >> s"Big / Small Text" >> a_
 	br
-	a #href "#list" >>> s"List" >>> a_
+	a #href "#list" >> s"List" >> a_
 	br
-	a #href "#table" >>> s"Table" >>> a_
+	a #href "#table" >> s"Table" >> a_
 	br
-	a #href "#images" >>> s"Images" >>> a_
+	a #href "#images" >> s"Images" >> a_
 	br
 
 	a # href "http://stackoverflow.com/questions/tagged/haskell"
 	  # accesskey "o" # tabindex "2"
-	s "A link to " >>> b >>> s"stackoverflow" >>> b_
-	a_ >>> br
+	s "A link to " >> b >> s"stackoverflow" >> b_
+	a_ >> br
 
 	a # href "http://www.reddit.com/r/haskell/"
 	   # accesskey "r" # tabindex "1"
-	s "A link to " >>> b >>> s"reddit/r/haskell" >>> b_
-	a_ >>> br
+	s "A link to " >> b >> s"reddit/r/haskell" >> b_
+	a_ >> br
 
 	a # href "http://http://ALG_3rd.pdf"
-	s "A link to a" >>> b >>> s"PDF" >>> b_ >>> s"on my computer"
-	a_ >>> br
+	s "A link to a" >> b >> s"PDF" >> b_ >> s"on my computer"
+	a_ >> br
 	blockquote_
     --div_
 
@@ -75,31 +75,31 @@ myhtml = do
 -- List
 ---------------------------
     a # id "list" # "/"
-    div >>> do
+    div >> do
 	h3'"List Example"
-	ul >>> do
-	    p >>> li >>> do
+	ul >> do
+	    p >> li >> do
 		s"This is a list item"
-		ol >>> do
-		    li >>> s"This is a list item"
-		    li >>> s"This is a list item"
-		    li >>> s"This is a list item"
+		ol >> do
+		    li >> s"This is a list item"
+		    li >> s"This is a list item"
+		    li >> s"This is a list item"
 		ol_
 	    li_
-	    p >>> li >>> do
+	    p >> li >> do
 		s"This is a list item"
-		ol >>> do
-		    li >>> s"This is a list item"
-		    li >>> s"This is a list item"
-		    li >>> s"This is a list item"
+		ol >> do
+		    li >> s"This is a list item"
+		    li >> s"This is a list item"
+		    li >> s"This is a list item"
 		ol_
 	    li_
-	    p >>> li >>> do
+	    p >> li >> do
 		s"This is a list item"
-		ol >>> do
-		    li >>> s"This is a list item"
-		    li >>> s"This is a list item"
-		    li >>> s"This is a list item"
+		ol >> do
+		    li >> s"This is a list item"
+		    li >> s"This is a list item"
+		    li >> s"This is a list item"
 		ol_
 	    li_
 	ul_
@@ -109,15 +109,15 @@ myhtml = do
 -- TABLE
 ---------------------------
     a # id "table" # "/"
-    div # id "table" >>> do
+    div # id "table" >> do
 	h3'"Table Example"
-	table # "border=2" >>> do
-	    tr >>> do
-		td >>> s"table 1 1"
-		td >>> s"table 1 2"
-	    tr >>> do
-		td >>> s"table 2 1"
-		td >>> s"table 2 2"
+	table # "border=2" >> do
+	    tr >> do
+		td >> s"table 1 1"
+		td >> s"table 1 2"
+	    tr >> do
+		td >> s"table 2 1"
+		td >> s"table 2 2"
 	    tr_
 	table_
     --div_
@@ -126,11 +126,11 @@ myhtml = do
 -- Simple
 ---------------------------
     a # id "simple" # "/"
-    div # id "simple" >>> do -- Simple formatting
+    div # id "simple" >> do -- Simple formatting
 	h3' "Simple Formatting"
 	p # h_class "par1"
-	s "This is the first paragraph. we can" >>> b >>> s"bold" >>> b_
-	s "things or" >>> i >>> s"italicize things." >>> i_
+	s "This is the first paragraph. we can" >> b >> s"bold" >> b_
+	s "things or" >> i >> s"italicize things." >> i_
 	br
 	s "This sample program will eventually show a great many features"
 	s "of html"
@@ -152,7 +152,7 @@ myhtml = do
 -- PRE
 ---------------------------
     a # id "preformatted" # "/"
-    div >>> do -- Preformatted text
+    div >> do -- Preformatted text
 	h3' "Preformatted Text"
 	p
 	s"This paragraph will be used to demonstrate preformatted code."
@@ -166,26 +166,26 @@ myhtml = do
 -- BIG/SMALL
 ---------------------------
     a # id "bigsmall" # "/"
-    div # h_class "bigsmall" >>> do -- Big / Small
+    div # h_class "bigsmall" >> do -- Big / Small
 	p
 	h3' "Demonstrate big/small"
 	small' "this is small line 1."
-	br >>> small' "this is small line 2."
+	br >> small' "this is small line 2."
 	p
-	br >>> s"Normal line 1"
-	br >>> s"Normal line 2"
+	br >> s"Normal line 1"
+	br >> s"Normal line 2"
 	p
-	br >>> s"Normal line 3"
+	br >> s"Normal line 3"
 	p
 	let sval = "this will be big line 1 when I set BIG style"
-	br >>> span # h_class "bigtext" >>> s sval >>> span_
+	br >> span # h_class "bigtext" >> s sval >> span_
     --div_
 
 ---------------------------
 -- IMAGE
 ---------------------------
     a # id "images" # "/"
-    div >>> do
+    div >> do
 	h3' "Demonstrate Simple Images"
 	p
 	s"This is a caption for the image."

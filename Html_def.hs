@@ -22,7 +22,7 @@ def_html mytitle mystyle mybody = do
 
     h_head
     meta # http_equiv "Content-Type"  # content "text/html;charset=utf-8"  #  "/"
-    h_title >>> s  mytitle >>> h_title_
+    h_title >> s  mytitle >> h_title_
     mystyle
     h_head_
 

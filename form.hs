@@ -17,7 +17,7 @@ getdata3 [] n v vt = getdata2 [] "" "" ((reverse n,reverse v):vt)
 getdata3 (x:xs) n v vt = getdata3 xs n (x:v) vt
 
 myhtml env = do
-    h1 # "style=color:#008" >>> s"Html Form  Test Program" >>> h1_
+    h1 # "style=color:#008" >> s"Html Form  Test Program" >> h1_
     p
     form # method "query" # action "form"
     input # h_type "text" # name "input1" # value "a12345" # size "20"
