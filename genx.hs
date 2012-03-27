@@ -6,7 +6,7 @@ tags = [
     ,("abbr","0")
     ,("b","0")
     ,("blockquote","0")
-    ,("body","0")
+    ,("body","97")
     ,("del","0")
     ,("div","57")
     ,("form","0")
@@ -82,7 +82,6 @@ attrs = [
 exports = [
      "s"
     ,"(#)"
-    ,"(>>)"
     ,"btag"
     ,"State"
     ,"Html"
