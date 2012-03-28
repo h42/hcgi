@@ -68,8 +68,7 @@ myhtml = do
 	a # href "http://http://ALG_3rd.pdf"
 	s "A link to a" >> b >> s"PDF" >> b_ >> s"on my computer"
 	a_ >> br
-	blockquote_
-    --div_
+	blockquote_ >> p_
 
 ---------------------------
 -- List
@@ -78,32 +77,28 @@ myhtml = do
     div >> do
 	h3'"List Example"
 	ul >> do
-	    p >> li >> do
-		s"This is a list item"
+	    li >> do
+		s"This is an outer list item"
 		ol >> do
 		    li >> s"This is a list item"
 		    li >> s"This is a list item"
 		    li >> s"This is a list item"
 		ol_
-	    li_
-	    p >> li >> do
-		s"This is a list item"
+	    li >> do
+		s"This is an outer list item"
 		ol >> do
 		    li >> s"This is a list item"
 		    li >> s"This is a list item"
 		    li >> s"This is a list item"
 		ol_
-	    li_
-	    p >> li >> do
-		s"This is a list item"
+	    li >> do
+		s"This is an outer list item"
 		ol >> do
 		    li >> s"This is a list item"
 		    li >> s"This is a list item"
 		    li >> s"This is a list item"
 		ol_
-	    li_
 	ul_
-    --div_
 
 ---------------------------
 -- TABLE
@@ -118,9 +113,7 @@ myhtml = do
 	    tr >> do
 		td >> s"table 2 1"
 		td >> s"table 2 2"
-	    tr_
 	table_
-    --div_
 
 ---------------------------
 -- Simple
@@ -146,7 +139,6 @@ myhtml = do
 	    s "This sentence is just here to fill up space so we can test links better."
 	    br) [1..20]
 
-    --div_
 
 ---------------------------
 -- PRE
@@ -160,7 +152,6 @@ myhtml = do
 	pre
 	mycode
 	pre_
-    --div_
 
 ---------------------------
 -- BIG/SMALL
@@ -179,7 +170,6 @@ myhtml = do
 	p
 	let sval = "this will be big line 1 when I set BIG style"
 	br >> span # h_class "bigtext" >> s sval >> span_
-    --div_
 
 ---------------------------
 -- IMAGE
@@ -194,7 +184,6 @@ myhtml = do
 	    # width "150" # height  "180" # title "Plumber" # "/"
 	br
 	s"This should go under the image"
-
 
 main = do
     --s <- readFile "jpd.hs"

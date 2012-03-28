@@ -24,41 +24,49 @@ execState m st = snd (runState m st)
 
 data Html = Html {ztags :: [String]
 		 ,zetags :: [(String,Int)]
-		 }
+		 ,zerror :: Int
+		 } deriving Show
+
+errtag t t2 hd = "<!-- ERROR\n"
+    ++ concat ["t=",t,"  t2=",t2,"\n"]
+    ++ show (take 10 $ ztags hd) ++ "\n"
+    ++ show (zetags hd) ++ "\n"
+    ++ "-->"
+
 ---------------------
 -- BTAG
 ---------------------
 btag :: String -> Int -> State Html ()
-btag t pri = State (\hd -> btag' t pri hd)
+btag t pri = State (\hd -> btag' t (if zerror hd == 1 then 0 else pri) hd)
 
 btag' t 0 hd = ((), hd{ztags=tagit t : ztags hd})
-btag' t pri hd@(Html tags []) = ((),hd{ztags=tagit t : tags, zetags=[(t,pri)]})
+btag' t p hd@(Html tags [] _ ) = ((),hd{ztags=tagit t : tags, zetags=[(t,p)]})
 
-btag' t pri hd@(Html tags etags@((t2,p2):es))
-    | p2 > pri    = ((),hd{ztags=tagit t:tags, zetags=(t,pri):etags})
-    | p2 < pri    = btag' t pri hd{ztags=etagit t2:tags, zetags=es}
-    | p2 == pri   = ( (), hd{ztags=tagit t2:etagit t2:tags} )
+btag' t p hd@(Html tags etags@((t2,p2):es) err)
+    | p==7 && t==t2 = ( (), hd{ztags=tagit t:etagit t:tags} )
+    | p==7 && p2==7 && chk7 t es =
+	btag' t p hd{ztags=etagit t2:tags,zetags=es}
+    | otherwise     = ( (), hd{ztags=tagit t:tags, zetags=(t,p):etags})
+
+chk7 t [] = False
+chk7 t ((t2,p2):etags)
+    | t2 == t = True
+    | p2 == 7 = chk7 t etags
+    | otherwise = False
 
 ---------------------
 -- ETAG
 ---------------------
 etag :: String -> Int -> State Html ()
-etag t 0 = State (\hd -> etag0 t 0 hd)
-etag t pri = State (\hd -> etag' t pri hd)
+etag t pri = State (\hd -> etag' t (if zerror hd /=0 then 0 else pri) hd)
 
-  -- NO AUTO CLOSE
-etag0 t pri hd =
-    let ztags' = (etagit t) : ztags hd
-    in ((),hd{ztags=ztags'})
+etag' t 0 hd = ((),hd{ztags=(etagit t) : ztags hd})
+etag' t p hd@(Html tags [] _) = ((),hd{ztags=etagit t:tags,zerror=1}) -- error state
 
-  -- AUTO CLOSE
-etag' t pri hd@(Html tags []) = ((),hd) -- error state
-
-etag' t p hd@(Html tags ((t2,p2):es))
-    | p2 < p    = etag' t p hd{ztags=etagit t2:tags, zetags=es}
-    | p2 == p   = ((),hd{ztags=etagit t2:tags, zetags=es})
-     -- did ot find tag but add anyway ???
-    | otherwise = ((),hd{ztags=etagit t:tags})
+etag' t p hd@(Html tags ((t2,p2):es) _)
+    | t==t2     = ((),hd{ztags=etagit t:tags, zetags=es})
+    | p2==7    = etag' t p hd{ztags=etagit t2:tags, zetags=es}
+    | otherwise = ((),hd{ztags=errtag t t2 hd:etagit t:tags, zerror=1}) -- error state
 
 ---------------------
 -- SUBTAG
@@ -72,20 +80,6 @@ subtag' t xs hd =
 
 s :: String -> State Html ()
 s x = State (\hd -> ((),hd {ztags=x:(ztags hd)}))
-
-{-
-etag1 :: String -> State Html ()
-etag1 sx = State (\hd -> ((),
-    let (bt,et) = etag2 sx (ztags hd) (etags hd)
-    in hd{ztags=bt, etags=et}
- ))
-
-etag2 :: String -> [String] -> [String] -> ([String],[String])
-etag2 s tags []  = (tags,[])
-etag2 s (e:es) tags
-    | s == e    = ((etagit s):tags,es)
-    | otherwise = etag2 s es (etagit s:tags)
--}
 
 etagit :: String -> String
 etagit t = "</" ++ t ++ ">"
@@ -107,7 +101,7 @@ atag :: String -> String -> String
 atag var val = var ++ ("=\"" ++ val ++  "\"")
 
 html0 :: Html -- KEEP for accurate error messages if Html changed
-html0 = Html [] []
+html0 = Html [] [] 0
 
 render :: State Html () -> String
 render (hf) = str where
