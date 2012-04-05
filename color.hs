@@ -11,8 +11,8 @@ cellout red green blue = "<td style=\"color:"  ++ hc
     (hc,hc') = hexout red green blue
 
 hexout red green blue = (h,h') where
-    h = "#" ++ hex red ++ hex green ++ hex blue
-    h' = "#" ++ hex (255-red) ++ hex (255-green) ++ hex (255-blue)
+    h = "!" ++ hex red ++ hex green ++ hex blue
+    h' = "!" ++ hex (255-red) ++ hex (255-green) ++ hex (255-blue)
 
 hex x = sx where
     sx = [hexc (P.div x 16), hexc (mod x 16) ]
@@ -26,7 +26,7 @@ cs1 = map
  colors
 
 myhtml = do
-    h1 # "style=color:red" >> s"Color Test Program" >> h1_
+    h1 ! "style=color:red" >> s"Color Test Program" >> h1_
     table
     tr
     mapM_ s (intersperse "<tr>" cs1)

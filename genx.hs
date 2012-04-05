@@ -81,7 +81,7 @@ attrs = [
 
 exports = [
      "s"
-    ,"(#)"
+    ,"(!)"
     ,"btag"
     ,"State"
     ,"Html"
