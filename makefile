@@ -1,16 +1,19 @@
 HSFLAGS = -O -fwarn-name-shadowing -static  #-dynamic
 OBJS=Html_base.o Html.o Html_def.o
-PROGS=genx jpd
 
-.PHONY: all
+PROGS=genx jpd css    # monad color form
 
-all:jpd monad color form
+.PHONY: ALL
+
+ALL:$(PROGS)
 
 monad:monad.hs
 
 color:jpd
 
 form:jpd
+
+css:jpd
 
 jpd:jpd.hs $(OBJS)
 	ghc $(HSFLAGS) --make -o jpd jpd.hs
@@ -34,12 +37,10 @@ Html.hs:genx
 % : %.hs
 	ghc $(HSFLAGS) --make -o $@ $<
 
-install:color jpd
-	install -m 755 -o apache -g apache color  /var/www/cgi-bin
-	install -m 755 -o apache -g apache form  /var/www/cgi-bin
-	install -m 755 -o apache -g apache jpd  /var/www/cgi-bin
-	install -m 755 -o apache -g apache plumber.jpg  /var/www/html
-	install -m 755 -o apache -g apache ALG_3rd.pdf  /var/www/html
+install:$(ALL)
+	install -m 755 -o apache -g apache $(PROGS) /var/www/cgi-bin
+	#install -m 755 -o apache -g apache plumber.jpg  /var/www/html
+	#install -m 755 -o apache -g apache ALG_3rd.pdf  /var/www/html
 	ls -l /var/www/cgi-bin
 
 clean:

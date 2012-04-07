@@ -8,7 +8,7 @@ tags = [
     ,("blockquote","1")
     ,("body","1")
     ,("del","1")
-    ,("div","7")
+    ,("div","1")
     ,("form","1")
     ,("h_head","1")
     ,("html","1")

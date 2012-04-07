@@ -53,6 +53,7 @@ myhtml = do
 	h1
 	s "HCGI Demo Program"
 	h1_
+    div_
 
 ---------------------------
 -- Table of COntents
@@ -88,6 +89,7 @@ myhtml = do
 	s "A link to a" >> b >> s"PDF" >> b_ >> s"on my computer"
 	a_ >> br
 	blockquote_ >> p_
+    div_
 
 ---------------------------
 -- List
@@ -118,6 +120,7 @@ myhtml = do
 		    li >> s"This is a list item"
 		ol_
 	ul_
+    div_
 
 ---------------------------
 -- TABLE
@@ -133,6 +136,7 @@ myhtml = do
 		td >> s"table 2 1"
 		td >> s"table 2 2"
 	table_
+    div_
 
 ---------------------------
 -- Simple
@@ -157,7 +161,7 @@ myhtml = do
 	mapM_ (\_ -> do
 	    s "This sentence is just here to fill up space so we can test links better."
 	    br) [1..20]
-
+    div_
 
 ---------------------------
 -- PRE
@@ -171,6 +175,7 @@ myhtml = do
 	pre
 	mycode
 	pre_
+    div_
 
 ---------------------------
 -- BIG/SMALL
@@ -189,6 +194,7 @@ myhtml = do
 	p
 	let sval = "this will be big line 1 when I set BIG style"
 	br >> span ! h_class "bigtext" >> s sval >> span_
+    div_
 
 ---------------------------
 -- IMAGE
@@ -203,6 +209,7 @@ myhtml = do
 	    ! width "150" ! height  "180" ! title "Plumber" ! "/"
 	br
 	s"This should go under the image"
+    div_
 
 main = do
     --s <- readFile "jpd.hs"
