@@ -1,7 +1,7 @@
 HSFLAGS = -O -fwarn-name-shadowing -static  #-dynamic
 OBJS=Html_base.o Html.o Html_def.o
 
-PROGS=genx jpd css    # monad color form
+PROGS=genx jpd css form   # monad color
 
 .PHONY: ALL
 

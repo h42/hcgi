@@ -5,7 +5,10 @@ import Html_def
 import Prelude hiding (id,div,span)
 import qualified Prelude as P
 
-getdata :: String -> [(String,String)]
+type Vtab = [(String,String)]
+
+-- GETDATA
+getdata :: String -> Vtab
 getdata xs = getdata2 xs "" "" []
 
 getdata2 [] _ _ vt = vt
@@ -16,6 +19,14 @@ getdata3 ('&':xs) n v vt = getdata2 xs "" "" ((reverse n,reverse v):vt)
 getdata3 [] n v vt = getdata2 [] "" "" ((reverse n,reverse v):vt)
 getdata3 (x:xs) n v vt = getdata3 xs n (x:v) vt
 
+-- GETVAR
+getvar v vtab = case (lookup v vtab) of Just v' -> v'; _ -> ""
+
+
+--
+-- Application
+--
+
 myhtml env = do
     h1 ! "style=color:#008" >> s"Html Form  Test Program" >> h1_
     p
@@ -24,14 +35,16 @@ myhtml env = do
     br
     input ! h_type "text" ! name "input2" ! value "b12345" ! size "20"
     br
-    input ! h_type "submit" ! name "sub1" ! value "sub1"
+    input ! h_type "submit" ! name "sub1" ! value "sub1val"
     br
-    input ! h_type "submit" ! name "sub2" ! value "sub2"
+    input ! h_type "submit" ! name "sub2" ! value "sub2val"
     form_
     p_
     s env
 
 --get_data env =
+
+
 
 main = do
     env <- getEnvironment
