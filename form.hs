@@ -2,57 +2,40 @@ import Data.List
 import System.Environment
 import Html
 import Html_def
+import Cgi
 import Prelude hiding (id,div,span)
 import qualified Prelude as P
 
-type Vtab = [(String,String)]
-
--- GETDATA
-getdata :: String -> Vtab
-getdata xs = getdata2 xs "" "" []
-
-getdata2 [] _ _ vt = vt
-getdata2 ('=':xs) n v vt = getdata3 xs n "" vt
-getdata2 (x:xs) n v vt = getdata2 xs (x:n) "" vt
-
-getdata3 ('&':xs) n v vt = getdata2 xs "" "" ((reverse n,reverse v):vt)
-getdata3 [] n v vt = getdata2 [] "" "" ((reverse n,reverse v):vt)
-getdata3 (x:xs) n v vt = getdata3 xs n (x:v) vt
-
--- GETVAR
-getvar v vtab = case (lookup v vtab) of Just v' -> v'; _ -> ""
-
+-- textInput
+input_text nm len val =
+    input ! h_type "text" ! name nm ! value val ! size (show len)
+input_text2 nm len cgi = input_text nm len (cgi_var nm cgi)
 
 --
 -- Application
 --
 
-myhtml env = do
+myhtml cgi = do
     h1 ! "style=color:#008" >> s"Html Form  Test Program" >> h1_
     p
-    form ! method "query" ! action "form"
-    input ! h_type "text" ! name "input1" ! value "a12345" ! size "20"
+    --form ! method "query" ! action "form"
+    form ! method "post" ! action "form"
+    input_text2 "input1" 20 cgi ! id "t1"
     br
-    input ! h_type "text" ! name "input2" ! value "b12345" ! size "20"
+    input_text "input2" 20 "b12345"
     br
     input ! h_type "submit" ! name "sub1" ! value "sub1val"
     br
     input ! h_type "submit" ! name "sub2" ! value "sub2val"
     form_
     p_
-    s env
-
---get_data env =
-
-
+    s (show (zvtab cgi)) >> br
+    let envs = unlines $ map (\(x,y)->x ++ " = " ++ y ++ "<br />") (zenv cgi)
+    s (envs) >> br
 
 main = do
-    env <- getEnvironment
-    let mq' = case (lookup "QUERY_STRING" env) of
-		Nothing -> []
-		Just xs -> getdata xs
-	mq = show mq' ++ "<br />\n"
-    let envs = unlines $ map (\(x,y)->x ++ " = " ++ y ++ "<br />") env
+    cgi <- cgi_init
+    print cgi
     putStr $ def_http_hdr ++
-	     render (def_html "Test Form" (s " ") (myhtml $mq) ) -- ++ envs) )
+	     render (def_html "Test Form" (s " ") (myhtml cgi) )
 

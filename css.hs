@@ -7,12 +7,13 @@ import qualified Prelude as P
 
 mystyle = do
     style ! h_type "text/css"
-    s"body {background-color:#f0f8f8;color:#0000c0;}"
-    s"#leftcol {width:200px;}"
+    s"h1 {background:#f8f8f8}"
+    s"body {background-color:#fff;color:#000080;}"
+    s"#leftcol {width:15%;}"
     s"#leftcol {position:absolute}"
-    s"#maincol {width:800px}"
-    s"#maincol {position:absolute;left:220px}"
-    s"#rightcol {position:absolute;left:1040px}"
+    s"#maincol {width:60%; min-width:30%; margin:auto auto 10px 10px;}"
+    s"#maincol {position:absolute;left:20%}"
+    s"#rightcol {position:absolute; left:85%; min-width:0px}"
     style_
 
 myhtml = do

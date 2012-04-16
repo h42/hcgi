@@ -1,6 +1,15 @@
 import Data.List
 import System.IO
 
+exports = [
+     "s"
+    ,"(!)"
+    ,"btag"
+    ,"State"
+    ,"Html"
+    ,"render"
+ ]
+
 tags = [
      ("a","0")
     ,("abbr","1")
@@ -77,15 +86,6 @@ attrs = [
     ,"tabindex"
     ,"h_type"
     ,"value"
- ]
-
-exports = [
-     "s"
-    ,"(!)"
-    ,"btag"
-    ,"State"
-    ,"Html"
-    ,"render"
  ]
 
 gen_mod =

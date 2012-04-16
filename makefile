@@ -1,11 +1,14 @@
-HSFLAGS = -O -fwarn-name-shadowing -static  #-dynamic
-OBJS=Html_base.o Html.o Html_def.o
+HSFLAGS = -O -fwarn-name-shadowing -dynamic
+OBJS=Html_base.o Html.o Html_def.o Cgi.o
 
-PROGS=genx jpd css form   # monad color
+PROGS=genx jpd css form color  # monad
 
 .PHONY: ALL
 
 ALL:$(PROGS)
+
+ccc:ccc.c
+	gcc -o ccc -static ccc.c
 
 monad:monad.hs
 
@@ -18,6 +21,8 @@ css:jpd
 jpd:jpd.hs $(OBJS)
 	ghc $(HSFLAGS) --make -o jpd jpd.hs
 
+Cgi.o:Cgi.hs
+	ghc $(HSFLAGS)  -c Cgi.hs  -o Cgi.o
 
 Html_base.o:Html_base.hs
 	ghc $(HSFLAGS)  -c Html_base.hs  -o Html_base.o
