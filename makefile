@@ -1,7 +1,7 @@
 HSFLAGS = -O -fwarn-name-shadowing -dynamic
 OBJS=Html_base.o Html.o Html_def.o Cgi.o
 
-PROGS=genx jpd css form color  # monad
+PROGS=genx jpd css form color mkthumb # monad
 
 .PHONY: ALL
 
@@ -44,6 +44,7 @@ Html.hs:genx
 
 install:$(ALL)
 	install -m 755 -o apache -g apache $(PROGS) /var/www/cgi-bin
+	install -m755 -o jerry -g jerry mkthumb /usr/local/bin
 	#install -m 755 -o apache -g apache plumber.jpg  /var/www/html
 	#install -m 755 -o apache -g apache ALG_3rd.pdf  /var/www/html
 	ls -l /var/www/cgi-bin

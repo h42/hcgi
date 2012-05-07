@@ -8,8 +8,8 @@ import qualified Prelude as P
 
 -- textInput
 input_text nm len val =
-    input ! h_type "text" ! name nm ! value val ! size (show len)
-input_text2 nm len cgi = input_text nm len (cgi_var nm cgi)
+     input ! h_type "text" ! name nm ! value val ! size (show len)
+input_vtext nm len cgi = input_text nm len (cgi_var nm cgi)
 
 --
 -- Application
@@ -20,7 +20,7 @@ myhtml cgi = do
     p
     --form ! method "query" ! action "form"
     form ! method "post" ! action "form"
-    input_text2 "input1" 20 cgi ! id "t1"
+    input_vtext "input1" 20 cgi ! id "t1"
     br
     input_text "input2" 20 "b12345"
     br
@@ -30,8 +30,7 @@ myhtml cgi = do
     form_
     p_
     s (show (zvtab cgi)) >> br
-    let envs = unlines $ map (\(x,y)->x ++ " = " ++ y ++ "<br />") (zenv cgi)
-    s (envs) >> br
+    s (unlines $ map (\(x,y)->x ++ " = " ++ y ++ "<br />") (zenv cgi)) >> br
 
 main = do
     cgi <- cgi_init
