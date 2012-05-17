@@ -6,6 +6,7 @@ module Cgi (
 ) where
 
 import System.Environment
+import Data.Char
 
 -------------------------------
 -- GETDATA
@@ -19,12 +20,12 @@ data CGI = CGI {zenv :: Vtab, zvtab :: Vtab}
 -- CGI_INIT
 cgi_init :: IO CGI
 cgi_init = do
-    env' <- getEnvironment
-    vtab' <- case (cgi_lookup "REQUEST_METHOD" env') of
+    env <- getEnvironment
+    vtab <- case (cgi_lookup "REQUEST_METHOD" env) of
 	"POST" -> fmap getdata getContents
-	"GET"  -> return (getdata $ cgi_lookup "QUERY_STRING" env')
+	"GET"  -> return (getdata $ cgi_lookup "QUERY_STRING" env)
 	_      -> return []
-    return CGI {zenv=env', zvtab=vtab'}
+    return CGI {zenv=env, zvtab=vtab}
 
 -- CGI_VAR
 cgi_var :: String -> CGI -> String
@@ -43,11 +44,19 @@ cgi_lookup v e = case (lookup v e) of
 getdata :: String -> Vtab
 getdata xs = getdata2 xs "" "" []
 
+getdata2 :: String -> String -> String -> Vtab -> Vtab
 getdata2 [] _ _ vt = vt
 getdata2 ('=':xs) n v vt = getdata3 xs n "" vt
 getdata2 (x:xs) n v vt = getdata2 xs (x:n) "" vt
 
 getdata3 ('&':xs) n v vt = getdata2 xs "" "" ((reverse n,reverse v):vt)
 getdata3 [] n v vt = getdata2 [] "" "" ((reverse n,reverse v):vt)
+getdata3 ('%':xs) n v vt = getdata4 xs n v vt
 getdata3 (x:xs) n v vt = getdata3 xs n (x:v) vt
 
+getdata4 xs n v vt = getdata3 xs' n (x':v) vt where
+    (x',xs') = if length xs >= 2 && all isHexDigit (take 2 xs)
+		   then (dehex $ take 2 xs, drop 2 xs)
+		   else ('$',xs)
+
+dehex xs = chr $ foldl (\a x -> a*16 + digitToInt x) 0 xs
